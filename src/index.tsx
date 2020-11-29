@@ -1,15 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import reportWebVitals from "./reportWebVitals";
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import Login from "./Login/Login";
+import SignUp from "./Signup/SignUp";
+import Dashboard from "./Dashboard/Dashboard";
+import "./index.css";
+import firebase from "firebase/app";
+require("firebase/firestore");
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+firebase.initializeApp({
+  apiKey: "AIzaSyBc78tVw3feeCYqSwY1bJ47wCOBR76T9CI",
+  authDomain: "chatapp-d79be.firebaseapp.com",
+  databaseURL: "https://chatapp-d79be.firebaseio.com",
+  projectId: "chatapp-d79be",
+  storageBucket: "chatapp-d79be.appspot.com",
+  messagingSenderId: "210308927751",
+  appId: "1:210308927751:web:19efc6a9f31a7acd4335a2",
+});
+const routing = (
+  <Router>
+    <div id="routing-container">
+      <Route path="/login" component={Login}></Route>
+      <Route path="/signup" component={SignUp}></Route>
+      <Route path="/dashboard" component={Dashboard}></Route>
+    </div>
+  </Router>
 );
+ReactDOM.render(routing, document.getElementById("root"));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

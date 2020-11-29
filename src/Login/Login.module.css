@@ -1,0 +1,32 @@
+.main {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.paper {
+  margin-top: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 30px;
+  width: 25%;
+}
+
+.form {
+  width: 100%;
+}
+
+.noAccountHeader {
+  width: 100%;
+}
+.signUpLink {
+  width: 100%;
+  text-decoration: "none";
+  color: "#303f9f";
+  font-weight: "bolder";
+}
+.errorText {
+  padding-top: 5%;
+  text-align: center;
+  color: tomato;
+}
