@@ -1,0 +1,56 @@
+.container {
+  overflow: scroll;
+  position: absolute;
+  background-color: white;
+  border-radius: 0.5rem;
+  margin-top: 5%;
+  border: 0.05rem solid lightgray;
+  width: 50%;
+  height: 80%;
+  margin-left: 35.1%;
+}
+.userSent {
+  margin-right: 10%;
+  float: right;
+  clear: both;
+  max-width: 70%;
+  margin-top: 5%;
+  padding: 1.2rem;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  background-color: #66a3ff;
+  color: white;
+  border-radius: 0.5rem;
+}
+.friendSent {
+  margin-left: 10%;
+  margin-top: 5%;
+  max-width: 70%;
+
+  float: left;
+  clear: both;
+  padding: 1.2rem;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  background-color: silver;
+  color: white;
+  border-radius: 0.5rem;
+}
+.chatHeader {
+  width: inherit;
+  height: 2.95rem;
+  background-color: lightgrey;
+  text-align: center;
+  position: fixed;
+}
+.iconBtn {
+  margin-top: 5px;
+}
+
+.btn {
+  border: none; /* Remove borders */
+  cursor: pointer; /* Mouse pointer on hover */
+  margin-right: 20px;
+  background-color: lightgrey;
+  outline: none;
+}
