@@ -4,12 +4,14 @@ import Styles from "./ChatView.module.css";
 import FaceTwoToneIcon from "@material-ui/icons/FaceTwoTone";
 import ChatRoundedIcon from "@material-ui/icons/ChatRounded";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
+import ChatTextBox from "../ChatTextBox/ChatTextBox";
 interface ChatViewProps {
   user: String;
   chat: firebase.firestore.DocumentData;
+  submitMessageFn(msg): any;
 }
 
-const ChatView: React.FC<ChatViewProps> = ({ user, chat }) => {
+const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
   const [btnColor, setBtnColor] = useState({
     chatIcon: "#00c1ff",
     detailIcon: "",
@@ -22,6 +24,7 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat }) => {
     }
   }, [chat]);
 
+  // Toggle the icon once clicked
   const onChatClick = () => {
     setBtnColor({ chatIcon: "#00c1ff", detailIcon: "" });
   };
@@ -33,7 +36,7 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat }) => {
     return null;
   } else {
     return (
-      <div className={Styles.container} id="chatView-container">
+      <div className={Styles.container}>
         <div className={Styles.chatHeader}>
           <button
             className={Styles.btn}
@@ -55,20 +58,23 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat }) => {
           {/* Your conversation with{" "}
                 {chat.users.filter((users) => users !== user)} */}
         </div>
-        {chat.messages.map((msg, index) => {
-          return (
-            <div key={index}>
-              <div
-                key={index}
-                className={
-                  msg.sender === user ? Styles.userSent : Styles.friendSent
-                }
-              >
-                {msg.message}
+        <div className={Styles.conversation} id="chatView-container">
+          {chat.messages.map((msg, index) => {
+            return (
+              <div key={index}>
+                <div
+                  key={index}
+                  className={
+                    msg.sender === user ? Styles.userSent : Styles.friendSent
+                  }
+                >
+                  {msg.message}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <ChatTextBox submitMessageFn={submitMessageFn} />
       </div>
     );
   }

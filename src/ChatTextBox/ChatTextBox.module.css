@@ -1,0 +1,28 @@
+.sendBtn {
+  color: grey;
+  cursor: pointer;
+  transition: 1s;
+  right: 7%;
+  bottom: 10%;
+  position: absolute;
+}
+.sendBtn:hover {
+  color: #00c1ff;
+}
+.chatTextBoxContainer {
+  position: fixed;
+
+  height: 17%;
+  box-sizing: border-box;
+  overflow: auto;
+  width: 50%;
+
+  border: 0.05rem solid lightgray;
+
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+
+  background-color: white;
+}
+.chatTextBox {
+  width: calc(100% - 25px);
+}

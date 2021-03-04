@@ -12,6 +12,8 @@
     "@types/node": "^12.19.6",
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
+    "draft-js": "^0.11.7",
+    "draft-js-plugins-editor": "^3.0.0",
     "firebase": "^8.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

@@ -1,18 +1,24 @@
 .container {
-  overflow: scroll;
-  position: absolute;
-  background-color: white;
-  border-radius: 0.5rem;
-  margin-top: 5%;
+  position: fixed;
+  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin-top: 2%;
   border: 0.05rem solid lightgray;
   width: 50%;
-  height: 80%;
+  height: 65%;
   margin-left: 35.1%;
 }
+.conversation {
+  overflow: scroll;
+  background-color: white;
+  margin-top: 6.5%;
+  height: 100%;
+}
+
 .userSent {
   margin-right: 10%;
   float: right;
   clear: both;
+  overflow: hidden;
   max-width: 70%;
   margin-top: 5%;
   padding: 1.2rem;
@@ -26,7 +32,7 @@
   margin-left: 10%;
   margin-top: 5%;
   max-width: 70%;
-
+  overflow: hidden;
   float: left;
   clear: both;
   padding: 1.2rem;
@@ -38,10 +44,13 @@
 }
 .chatHeader {
   width: inherit;
-  height: 2.95rem;
+  height: 3rem;
   background-color: lightgrey;
   text-align: center;
   position: fixed;
+  display: block;
+
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
 }
 .iconBtn {
   margin-top: 5px;
