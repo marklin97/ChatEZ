@@ -1,0 +1,63 @@
+body {
+  background-image: url("../../Assets/Images/Signup_Background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+.main {
+  width: 100%;
+  display: absolute;
+  margin-left: auto;
+  margin-right: auto;
+}
+.paper {
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 30px;
+  width: 25%;
+}
+.logo {
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin-left: 5%;
+}
+.form {
+  width: 100%;
+}
+.useRegistered {
+  padding-top: 5%;
+  width: 100%;
+}
+.loginLink {
+  width: 100%;
+  text-decoration: "none";
+  color: "#303f9f";
+  user-select: none;
+}
+.dialogTitle {
+  margin: 5% 0% 0% 5%;
+}
+.dialogContent {
+  margin: 0 0 0 5%;
+}
+.checkIcon {
+  vertical-align: middle;
+  display: inline-flex;
+}
+.signUpButton {
+  margin-top: 3.5%;
+}
+.signUpButtonText {
+  margin-right: 5%;
+}
+.errorText {
+  color: tomato;
+  font-size: 0.8rem;
+}
+.emailIcon {
+  margin-right: 2%;
+}

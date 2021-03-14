@@ -3,7 +3,6 @@ import firebase from "firebase";
 import Styles from "./ChatView.module.css";
 import FaceTwoToneIcon from "@material-ui/icons/FaceTwoTone";
 import ChatRoundedIcon from "@material-ui/icons/ChatRounded";
-import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import ChatTextBox from "../ChatTextBox/ChatTextBox";
 interface ChatViewProps {
   user: String;
@@ -16,6 +15,7 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
     chatIcon: "#00c1ff",
     detailIcon: "",
   });
+  const [currentChat, setCurrentChat] = useState(chat);
   useEffect(() => {
     // auto scroll down to the latest message
     const container = document.getElementById("chatView-container");
@@ -26,6 +26,7 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
 
   // Toggle the icon once clicked
   const onChatClick = () => {
+    console.log(currentChat);
     setBtnColor({ chatIcon: "#00c1ff", detailIcon: "" });
   };
   const onDetailClick = () => {
@@ -52,9 +53,7 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
           >
             <FaceTwoToneIcon fontSize="large" className={Styles.iconBtn} />
           </button>
-          <button className={Styles.btn}>
-            <AspectRatioIcon fontSize="large" className={Styles.expandBtn} />
-          </button>
+
           {/* Your conversation with{" "}
                 {chat.users.filter((users) => users !== user)} */}
         </div>

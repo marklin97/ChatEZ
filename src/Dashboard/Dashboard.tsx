@@ -5,6 +5,7 @@ import { Button } from "@material-ui/core";
 import firebase from "firebase";
 import Styles from "./Dashboard.module.css";
 import { timeStamp } from "console";
+import Grid from "@material-ui/core/Grid";
 
 interface chatState {
   selectedChat: number | null;
@@ -15,7 +16,7 @@ interface chatState {
 
 const Dashboard = () => {
   const [chatState, setChatState] = useState<chatState>({
-    selectedChat: null,
+    selectedChat: 0,
     newChatFormVisible: false,
     email: "",
     chats: null,
@@ -73,27 +74,47 @@ const Dashboard = () => {
       }
     });
   }, []);
+
   return (
+    // <div className={Styles.container}>
+    //   <ChartList
+    //     newChatBtnFn={newChatBtnClick}
+    //     selectChatFn={selectChat}
+    //     userEmail={chatState.email}
+    //     chats={chatState.chats}
+    //     selectedChat={chatState.selectedChat}
+    //   />
+    //   {chatState.chats ? (
+    //     <ChatView
+    //       user={chatState.email}
+    //       chat={chatState.chats[chatState.selectedChat]}
+    //       submitMessageFn={submitMessageFn}
+    //     />
+    //   ) : null}
+    //   {/* <Button className={Styles.signOutBtn}> Sign Out</Button> */}
+    // </div>
+
     <div className={Styles.container}>
-      <ChartList
-        newChatBtnFn={newChatBtnClick}
-        selectChatFn={selectChat}
-        userEmail={chatState.email}
-        chats={chatState.chats}
-        selectedChat={chatState.selectedChat}
-      />
-      {chatState.chats ? (
-        chatState.newChatFormVisible ? null : (
-          <div>
+      <Grid container direction="row" justify="center">
+        <Grid item xs={3}>
+          <ChartList
+            newChatBtnFn={newChatBtnClick}
+            selectChatFn={selectChat}
+            userEmail={chatState.email}
+            chats={chatState.chats}
+            selectedChat={chatState.selectedChat}
+          />
+        </Grid>
+        <Grid item xs={9}>
+          {chatState.chats ? (
             <ChatView
               user={chatState.email}
               chat={chatState.chats[chatState.selectedChat]}
               submitMessageFn={submitMessageFn}
             />
-          </div>
-        )
-      ) : null}
-      {/* <Button className={Styles.signOutBtn}> Sign Out</Button> */}
+          ) : null}
+        </Grid>
+      </Grid>
     </div>
   );
 };

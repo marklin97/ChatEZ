@@ -8,10 +8,12 @@ import Button from "@material-ui/core/Button";
 import Styles from "./Login.module.css";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
-
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import Logo from "../../Assets/Images/Logo.png";
+import Footer from "../../Components/Footer/Footer";
+import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
+
 // Styles
-import loginStyle from "./app.module.css";
 const Login = () => {
   const [userInputs, setUserInputs] = useState({
     email: "",
@@ -64,7 +66,7 @@ const Login = () => {
     if (!userInputs.email.match(mailFormat)) {
       setUserInputs({
         ...userInputs,
-        loginError: "Please enter a valid email address!",
+        loginError: "Please enter a valid email address",
       });
     } else {
       await firebase
@@ -76,7 +78,8 @@ const Login = () => {
         .catch((err) => {
           setUserInputs({
             ...userInputs,
-            loginError: "Incorrect login credentials",
+            loginError:
+              "The email and password you entered did not match our records. Please double check and try again.",
           });
           console.log(err);
         });
@@ -84,14 +87,16 @@ const Login = () => {
   };
   return (
     <div className={Styles.main}>
-      <Paper className={Styles.paper}>
-        <Typography component="h1" variant="h5">
-          Log In
-        </Typography>
+      <img src={Logo} className={Styles.logo} alt="Logo" />
+      <Footer />
+      <Paper elevation={3} className={Styles.paper}>
         <form className={Styles.form} onSubmit={(e) => userLogin(e)}>
+          {userInputs.loginError ? (
+            <span className={Styles.errorText}>{userInputs.loginError}</span>
+          ) : null}
           <FormControl required fullWidth margin="normal">
-            <InputLabel htmlFor="login-email-input">
-              Enter Your Email
+            <InputLabel shrink={true} htmlFor="login-email-input">
+              Email Address
             </InputLabel>
             <Input
               autoComplete="email"
@@ -101,8 +106,8 @@ const Login = () => {
             ></Input>
           </FormControl>
           <FormControl required fullWidth margin="normal">
-            <InputLabel htmlFor="login-password-input">
-              Enter Your Password
+            <InputLabel shrink={true} htmlFor="login-password-input">
+              Password
             </InputLabel>
             <Input
               autoComplete="current-password"
@@ -116,28 +121,23 @@ const Login = () => {
             color="primary"
             variant="contained"
             fullWidth
-            className={Styles.submit}
-            style={{ marginTop: "6%", height: "40px" }}
+            className={Styles.loginButton}
           >
-            Submit
+            <AlternateEmailIcon className={Styles.emailButton} />
+            <span className={Styles.loginButtonText}>Login</span>
           </Button>
         </form>
 
-        {userInputs.loginError ? (
-          <Typography className={Styles.errorText}>
-            {userInputs.loginError}
-          </Typography>
-        ) : null}
-
         <StyledFirebaseAuth
-          className={loginStyle.firebaseUi}
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />
 
-        <h4 className={Styles.noAccountHeader}>Don't Have An Account?</h4>
+        <Typography variant="subtitle2">Don't Have An Account?</Typography>
         <Link className={Styles.signUpLink} to="/signup">
-          Sign Up!
+          <Typography color="textPrimary" variant="overline" display="inline">
+            SIGN UP
+          </Typography>
         </Link>
       </Paper>
     </div>

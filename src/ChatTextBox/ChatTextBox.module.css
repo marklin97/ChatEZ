@@ -11,10 +11,8 @@
 }
 .chatTextBoxContainer {
   position: fixed;
-
-  height: 17%;
+  height: 23%;
   box-sizing: border-box;
-  overflow: auto;
   width: 50%;
 
   border: 0.05rem solid lightgray;

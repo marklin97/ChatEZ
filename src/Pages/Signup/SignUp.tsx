@@ -13,6 +13,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
+import Logo from "../../Assets/Images/Logo.png";
+import Footer from "../../Components/Footer/Footer";
 
 const SignUp = () => {
   const [display, setDisplay] = useState(false);
@@ -30,12 +33,16 @@ const SignUp = () => {
     if (!userInputs.email.match(mailFormat)) {
       setUserInputs({
         ...userInputs,
-        signUpError: "Please enter a valid email address!",
+        signUpError: "Please enter a valid email address",
       });
       return false;
       // check if passwords matches confirmation
     } else if (userInputs.password !== userInputs.confirmation) {
-      setUserInputs({ ...userInputs, signUpError: "Passwords not match!" });
+      setUserInputs({
+        ...userInputs,
+        signUpError:
+          "Short passwords are easy to guess. Try one with at least 8 characters.",
+      });
       return false;
     }
     return true;
@@ -117,10 +124,12 @@ const SignUp = () => {
 
   return (
     <div className={Styles.main}>
+      <img src={Logo} className={Styles.logo} alt="Logo" />
+
       <Paper className={Styles.paper}>
-        <Typography component="h1" variant="h5">
-          Sign Up
-        </Typography>
+        {userInputs.signUpError ? (
+          <span className={Styles.errorText}>{userInputs.signUpError}</span>
+        ) : null}
         <form
           onSubmit={(e) => {
             submitSignUp(e);
@@ -128,7 +137,7 @@ const SignUp = () => {
           className={Styles.form}
         >
           <FormControl required fullWidth margin="normal">
-            <InputLabel htmlFor="signup-email-input">
+            <InputLabel shrink={true} htmlFor="signup-email-input">
               Enter Your Email
             </InputLabel>
             <Input
@@ -140,7 +149,7 @@ const SignUp = () => {
           </FormControl>
 
           <FormControl required fullWidth margin="normal">
-            <InputLabel htmlFor="signup-password-input">
+            <InputLabel shrink={true} htmlFor="signup-password-input">
               Create A Password
             </InputLabel>
             <Input
@@ -150,7 +159,10 @@ const SignUp = () => {
             ></Input>
           </FormControl>
           <FormControl required fullWidth margin="normal">
-            <InputLabel htmlFor="signup-password-confirmation-input">
+            <InputLabel
+              shrink={true}
+              htmlFor="signup-password-confirmation-input"
+            >
               Confirm Your Password
             </InputLabel>
             <Input
@@ -164,23 +176,23 @@ const SignUp = () => {
             fullWidth
             color="primary"
             variant="contained"
-            className={Styles.submit}
-            style={{ marginTop: "5%" }}
+            className={Styles.signUpButton}
           >
-            Submit
+            <AlternateEmailIcon className={Styles.emailIcon} />
+            <span className={Styles.signUpButtonText}>Sign Up</span>
           </Button>
           <Dialog open={display} maxWidth={"xs"}>
-            <DialogTitle style={{ margin: "5% 0% 0% 5%" }}>
+            <DialogTitle className={Styles.dialogTitle}>
               <span style={{ color: "green" }}>
                 <CheckCircleOutlineIcon
                   fontSize={"large"}
-                  className={Styles.icon}
+                  className={Styles.checkIcon}
                 />{" "}
                 Thanks your account has been successfully created !
               </span>
             </DialogTitle>
 
-            <DialogContent style={{ margin: "0% 0% 0% 5%" }}>
+            <DialogContent className={Styles.dialogContent}>
               <DialogContentText>
                 Please check your inbox, an activation link has been sent to
                 your registered email, which needs to be activated before you
@@ -193,16 +205,14 @@ const SignUp = () => {
             </Button>
           </Dialog>
         </form>
-        {userInputs.signUpError ? (
-          <Typography className={Styles.errorText}>
-            {userInputs.signUpError}
-          </Typography>
-        ) : null}
-        <h4 className={Styles.noAccountHeader}>Already have an account?</h4>
+        <h5 className={Styles.userRegistered}>Already have an account?</h5>
         <Link className={Styles.loginLink} to="/login">
-          Login
+          <Typography color="textPrimary" variant="overline" display="inline">
+            Login
+          </Typography>
         </Link>
       </Paper>
+      <Footer />
     </div>
   );
 };

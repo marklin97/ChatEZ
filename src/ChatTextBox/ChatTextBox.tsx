@@ -12,9 +12,10 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ submitMessageFn }) => {
 
   const submitMessage = () => {
     if (messageValid(chatText)) {
+      submitMessageFn(chatText);
+      setChatText("");
       (document.getElementById("chattextbox") as HTMLInputElement).value = "";
     }
-    submitMessageFn(chatText);
   };
   const userTyping = (e) => {
     e.keyCode === 13 ? submitMessage() : setChatText(e.target.value);
