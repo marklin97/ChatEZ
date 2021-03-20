@@ -3,13 +3,14 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import SearchBar from "../SearchBar/SearchBar";
 import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
-import Styles from "./ChatList.module.css";
+import Styles from "./FriendList.module.css";
 import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import NotificationImportant from "@material-ui/icons/NotificationImportant";
+import { makeStyles } from "@material-ui/core/styles";
+// **
+import DefaultAvatar from "../../Assets/DefaultAvatar/download.jpg";
+import DefaultAvatar_1 from "../../Assets/DefaultAvatar/download-1.jpg";
 import firebase from "firebase";
 
 interface ChatListProps {
@@ -26,22 +27,40 @@ const ChartList: React.FC<ChatListProps> = ({
   userEmail,
   chats,
 }: ChatListProps): JSX.Element => {
-  const newChat = () => {
+  const newChats = () => {
     console.log("new chat");
   };
+  const useStyles = makeStyles({
+    root: {
+      "&$selected": {
+        backgroundColor: "rgb(80, 80, 80)",
+      },
+      "&$selected:hover": {
+        backgroundColor: "rgb(80, 80, 80)",
+      },
+    },
+    selected: {},
+  });
+  const classes = useStyles();
+
   useEffect(() => {}, []);
+  // props for search bar component
+  const [userInput, setUserInput] = useState("Search");
+  const handleUserTyping = (e) => {
+    console.log(e.target.value);
+  };
   return (
     <div className={Styles.container}>
-      <div className={Styles.chatHeader}></div>
-      {/* <Button
-        fullWidth
-        variant="contained"
-        className={Styles.newChatBtn}
-        style={{ borderRadius: 0 }}
-        onClick={newChat}
-      >
-        NEW MESSAGE
-      </Button> */}
+      <div className={Styles.chatHeader}>
+        <Avatar
+          variant={"rounded"}
+          src={DefaultAvatar_1}
+          className={Styles.avatar}
+        />
+        <span className={Styles.username}>{userEmail}</span>
+      </div>
+      <SearchBar userInput={userInput} onChange={handleUserTyping} />
+
       <List>
         {chats
           ? chats.map((chat, index) => {
@@ -52,29 +71,27 @@ const ChartList: React.FC<ChatListProps> = ({
                     onClick={() => selectChatFn(index)}
                     alignItems="flex-start"
                     selected={selectedChat === index}
+                    classes={{ root: classes.root, selected: classes.selected }}
                   >
                     <ListItemAvatar>
-                      <Avatar>
-                        {
-                          // would be replaced with actual avatar in the later stage
-                          chat.users
-                            .filter((user) => user !== userEmail)[0]
-                            .split("")[0]
-                        }
-                      </Avatar>
+                      <Avatar
+                        variant={"rounded"}
+                        // use default avatar if use has not set his own
+                        src={DefaultAvatar}
+                      />
                     </ListItemAvatar>
                     <ListItemText
                       primary={
-                        // user email
+                        // user email or username
                         chat.users.filter((user) => user !== userEmail)[0]
                       }
                       secondary={
                         // latest message from sender
-                        <Typography component="span" color="textPrimary">
+                        <span className={Styles.message}>
                           {chat.messages[
                             chat.messages.length - 1
                           ].message.substring(0, 30) + " ..."}
-                        </Typography>
+                        </span>
                       }
                     ></ListItemText>
                   </ListItem>

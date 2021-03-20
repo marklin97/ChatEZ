@@ -11,15 +11,12 @@
 }
 .chatTextBoxContainer {
   position: fixed;
-  height: 23%;
+  height: 20%;
   box-sizing: border-box;
   width: 50%;
-
   border: 0.05rem solid lightgray;
-
-  border-radius: 0rem 0rem 0.5rem 0.5rem;
-
-  background-color: white;
+  background-color: rgb(247, 247, 247);
+  border-radius: 0rem 0rem 0.3rem 0rem;
 }
 .chatTextBox {
   width: calc(100% - 25px);

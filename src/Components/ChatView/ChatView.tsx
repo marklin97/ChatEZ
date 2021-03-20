@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 import Styles from "./ChatView.module.css";
-import FaceTwoToneIcon from "@material-ui/icons/FaceTwoTone";
-import ChatRoundedIcon from "@material-ui/icons/ChatRounded";
+// import FaceTwoToneIcon from "@material-ui/icons/FaceTwoTone";
+// import ChatRoundedIcon from "@material-ui/icons/ChatRounded";
 import ChatTextBox from "../ChatTextBox/ChatTextBox";
 interface ChatViewProps {
   user: String;
@@ -39,7 +39,7 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
     return (
       <div className={Styles.container}>
         <div className={Styles.chatHeader}>
-          <button
+          {/* <button
             className={Styles.btn}
             style={{ color: btnColor.chatIcon }}
             onClick={onChatClick}
@@ -52,11 +52,15 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
             onClick={onDetailClick}
           >
             <FaceTwoToneIcon fontSize="large" className={Styles.iconBtn} />
-          </button>
+          </button> */}
 
           {/* Your conversation with{" "}
                 {chat.users.filter((users) => users !== user)} */}
+          <span className={Styles.username}>
+            {chat.users.filter((users) => users !== user)}{" "}
+          </span>
         </div>
+
         <div className={Styles.conversation} id="chatView-container">
           {chat.messages.map((msg, index) => {
             return (
@@ -67,7 +71,7 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
                     msg.sender === user ? Styles.userSent : Styles.friendSent
                   }
                 >
-                  {msg.message}
+                  <span className={Styles.messageText}>{msg.message}</span>
                 </div>
               </div>
             );

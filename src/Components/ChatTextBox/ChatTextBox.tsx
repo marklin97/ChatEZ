@@ -14,7 +14,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ submitMessageFn }) => {
     if (messageValid(chatText)) {
       submitMessageFn(chatText);
       setChatText("");
-      (document.getElementById("chattextbox") as HTMLInputElement).value = "";
+      (document.getElementById("chatTextbox") as HTMLInputElement).value = "";
     }
   };
   const userTyping = (e) => {
@@ -24,9 +24,10 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ submitMessageFn }) => {
   return (
     <div className={Styles.chatTextBoxContainer}>
       <TextField
-        id="chattextbox"
+        id="chatTextbox"
         multiline
-        rows={7}
+        rows={4}
+        InputProps={{ disableUnderline: true }}
         className={Styles.chatTextBox}
         placeholder="Type your message"
         onKeyUp={(e) => userTyping(e)}

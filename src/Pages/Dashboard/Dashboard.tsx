@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import ChartList from "../ChatList/ChartList";
-import ChatView from "../ChatView/ChatView";
-import { Button } from "@material-ui/core";
+import FriendList from "../../Components/FriendList/FriendList";
+import ChatView from "../../Components/ChatView/ChatView";
 import firebase from "firebase";
 import Styles from "./Dashboard.module.css";
 import { timeStamp } from "console";
@@ -97,7 +96,7 @@ const Dashboard = () => {
     <div className={Styles.container}>
       <Grid container direction="row" justify="center">
         <Grid item xs={3}>
-          <ChartList
+          <FriendList
             newChatBtnFn={newChatBtnClick}
             selectChatFn={selectChat}
             userEmail={chatState.email}

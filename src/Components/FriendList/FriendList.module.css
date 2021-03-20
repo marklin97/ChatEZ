@@ -1,0 +1,47 @@
+.container {
+  background-color: rgb(44, 44, 44);
+  min-height: 85%;
+  width: 20%;
+  margin-left: 15%;
+  margin-top: 2%;
+  position: fixed;
+  border-radius: 0.3rem 0rem 0rem 0.3rem;
+  overflow-y: scroll;
+}
+.listItem {
+  cursor: pointer;
+  color: white;
+}
+.message {
+  color: rgba(255, 255, 255, 0.438);
+  font-size: 14px;
+}
+.newChatBtn {
+  height: 10%;
+  background-color: lightblue;
+  color: #000;
+}
+.unreadMessage {
+  color: "red";
+  position: "absolute";
+  right: "5%";
+}
+.chatHeader {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  border-radius: 0.3rem 0rem 0rem 0rem;
+  background-color: rgb(44, 44, 44);
+}
+.avatar {
+  margin-left: 16px;
+  margin-top: 16px;
+}
+.username {
+  margin-left: 16px;
+  margin-top: 2px;
+  line-height: 4rem;
+  font-size: 19px;
+  color: white;
+  text-align: center;
+}

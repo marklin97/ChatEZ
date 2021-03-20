@@ -1,9 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+} from "../node_modules/react-router-dom";
 import Login from "./Pages/Login/Login";
-import SignUp from "./Pages/Signup/SignUp";
-import Dashboard from "./Dashboard/Dashboard";
+import SignUp from "./Pages/SignUp/SignUp";
+import Dashboard from "./Pages/Dashboard/Dashboard";
 import "./index.css";
 import firebase from "firebase/app";
 require("firebase/firestore");

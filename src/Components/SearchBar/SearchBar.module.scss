@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+}
+.inputField {
+  width: 65%;
+  align-self: center;
+  border-radius: 0.2rem;
+  padding: 3%;
+  padding-left: 15%;
+  background-color: rgb(32, 31, 31);
+  display: block;
+  margin-left: 5%;
+
+  border: none;
+
+  color: rgba(255, 255, 255, 0.438);
+}
+.searchIcon {
+  position: absolute;
+  margin-left: 8%;
+  margin-top: 2.5%;
+  color: rgba(255, 255, 255, 0.438);
+}
+
+input:focus {
+  outline: none;
+}

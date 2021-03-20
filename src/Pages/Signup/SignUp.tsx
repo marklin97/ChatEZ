@@ -147,6 +147,17 @@ const SignUp = () => {
               onChange={(e) => userTyping("email", e)}
             ></Input>
           </FormControl>
+          <FormControl required fullWidth margin="normal">
+            <InputLabel shrink={true} htmlFor="signup-displayName-input">
+              Enter A Display Name
+            </InputLabel>
+            <Input
+              autoComplete="name"
+              autoFocus
+              id="signup-displayName-input"
+              onChange={(e) => userTyping("email", e)}
+            ></Input>
+          </FormControl>
 
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="signup-password-input">
@@ -176,6 +187,7 @@ const SignUp = () => {
             fullWidth
             color="primary"
             variant="contained"
+            style={{ marginTop: "20px" }}
             className={Styles.signUpButton}
           >
             <AlternateEmailIcon className={Styles.emailIcon} />

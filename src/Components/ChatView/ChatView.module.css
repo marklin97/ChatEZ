@@ -1,56 +1,66 @@
 .container {
   position: fixed;
-  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
   margin-top: 2%;
-  border: 0.05rem solid lightgray;
   width: 50%;
   height: 55%;
   margin-left: 30.1%;
 }
 .conversation {
   overflow: scroll;
-  background-color: white;
+  background-color: rgb(247, 247, 247);
   margin-top: 3rem;
+  padding-bottom: 3%;
   height: 100%;
 }
-
+.username {
+  text-align: center;
+  line-height: 3rem;
+}
 .userSent {
-  margin-right: 10%;
+  margin-right: 13%;
   float: right;
   clear: both;
   overflow: hidden;
-  max-width: 70%;
+  max-width: 60%;
   margin-top: 5%;
-  padding: 1.2rem;
+  font-size: 14px;
+  padding: 0.8rem;
   box-sizing: border-box;
   word-wrap: break-word;
-  background-color: #66a3ff;
-  color: white;
-  border-radius: 0.5rem;
+  background-color: rgb(189, 248, 100);
+  color: black;
+  border-radius: 0.3rem;
+}
+.messageText {
+  letter-spacing: 0.8px;
 }
 .friendSent {
-  margin-left: 10%;
+  padding: 0.8rem;
+  margin-left: 13%;
   margin-top: 5%;
-  max-width: 70%;
+  max-width: 60%;
   overflow: hidden;
   float: left;
+  font-size: 14px;
+  border: 1.5px solid silver;
   clear: both;
-  padding: 1.2rem;
+
   box-sizing: border-box;
   word-wrap: break-word;
-  background-color: silver;
-  color: white;
-  border-radius: 0.5rem;
+  background-color: white;
+  color: black;
+  border-radius: 0.3rem;
 }
+
 .chatHeader {
   width: inherit;
   height: 3rem;
-  background-color: lightgrey;
+  background-color: rgb(247, 247, 247);
   text-align: center;
   position: fixed;
   display: block;
-
-  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  border-radius: 0rem 0.3rem 0rem 0rem;
+  border-bottom: 1.5px solid silver;
 }
 .iconBtn {
   margin-top: 5px;
