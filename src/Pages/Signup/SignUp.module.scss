@@ -1,3 +1,5 @@
+@import "../../Constant/colors.module.scss";
+
 body {
   background-image: url("../../Assets/Images/Signup_Background.jpg");
   background-position: center;
@@ -5,13 +7,8 @@ body {
   background-attachment: fixed;
   background-size: cover;
 }
-.main {
-  width: 100%;
-  display: absolute;
-  margin-left: auto;
-  margin-right: auto;
-}
-.paper {
+
+.signup_form {
   margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
@@ -25,39 +22,34 @@ body {
   height: 150px;
   margin-left: 5%;
 }
-.form {
-  width: 100%;
-}
-.useRegistered {
-  padding-top: 5%;
-  width: 100%;
-}
-.loginLink {
+
+.login_link {
   width: 100%;
   text-decoration: "none";
   color: "#303f9f";
   user-select: none;
 }
-.dialogTitle {
-  margin: 5% 0% 0% 5%;
-}
-.dialogContent {
-  margin: 0 0 0 5%;
-}
+
 .checkIcon {
   vertical-align: middle;
   display: inline-flex;
-}
-.signUpButton {
-  margin-top: 5%;
-}
-.signUpButtonText {
-  margin-right: 5%;
-}
-.errorText {
-  color: tomato;
-  font-size: 0.8rem;
+  color: $green-1;
 }
 .emailIcon {
   margin-right: 2%;
+}
+.loadingGif {
+  margin-top: 5%;
+}
+.warning {
+  color: $red;
+  font-size: 0.9rem;
+}
+.notification_title {
+  font-size: 1rem;
+  color: $green-1;
+}
+.notification_text {
+  font-size: 0.9rem;
+  color: $grey;
 }

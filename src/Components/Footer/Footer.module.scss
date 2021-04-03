@@ -1,24 +1,25 @@
-.footerContainer {
+@import "../../Constant/colors.module.scss";
+.footer_container {
   margin-left: 3%;
   position: absolute;
-  bottom: 5%;
+  bottom: 8%;
   width: 100%;
 }
 
-.footerButton {
+.footer_button {
   font-size: 0.7rem;
   font-family: unset;
   font-family: Helvetica;
   cursor: pointer;
-  color: rgb(243, 242, 242);
+  color: $white-1;
   padding-left: 5px;
   padding-right: 5px;
 }
-.buttonSeparator {
-  color: rgb(243, 242, 242);
+.buttonn_separator {
+  color: $white-1;
 }
 .copyright {
-  color: rgb(243, 242, 242);
+  color: $white-1;
   font-size: 0.7rem;
   margin-left: 55%;
   white-space: nowrap;

@@ -1,8 +1,7 @@
 import React from "react";
 import Styles from "./SearchBar.module.scss";
 import SearchIcon from "@material-ui/icons/Search";
-import Button from "@material-ui/core/Button";
-import FormDialog from "../FormDialog/FormDialog";
+import SearchForm from "../SearchForm/SearchForm";
 
 interface SearchBarProps {
   userInput: String;
@@ -15,13 +14,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInput, onChange }) => {
       <SearchIcon className={Styles.searchIcon} />
 
       <input
-        className={Styles.inputField}
+        className={Styles.input_field}
         // value={"        " + userInput}
         onChange={onChange}
         placeholder={"Search"}
       />
 
-      <FormDialog />
+      <SearchForm />
     </div>
   );
 };

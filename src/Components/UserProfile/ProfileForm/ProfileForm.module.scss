@@ -1,0 +1,32 @@
+@import "../../../Constant/colors.module.scss";
+
+@mixin icon {
+  font-size: 2.5rem;
+  display: block;
+}
+.marsIcon {
+  @include icon;
+  color: $blue-1;
+}
+.venusIcon {
+  @include icon;
+  color: $pink;
+}
+
+.dialog_content {
+  background-color: $white-2;
+  text-align: center;
+  height: 100%;
+}
+
+.dialog_action {
+  background-color: $white-2;
+  margin-top: 2%;
+}
+.optionText {
+  font-size: 0.8rem;
+  color: $silver-1;
+}
+.save_button {
+  color: $silver-1;
+}

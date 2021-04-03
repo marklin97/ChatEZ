@@ -1,0 +1,13 @@
+@import "../../Constant/colors.module.scss";
+.menu_item {
+  font-size: 0.85rem;
+  margin-right: 5px;
+}
+.AccountIcon {
+  margin-right: 10px;
+  color: $black-2;
+}
+.SignOutIcon {
+  margin-right: 10px;
+  color: $red-1;
+}

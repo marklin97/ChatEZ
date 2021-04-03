@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Styles from "./Login.module.css";
+import Styles from "./Login.module.scss";
 import { Link } from "../../../node_modules/react-router-dom";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import Logo from "../../Assets/Images/Logo.png";
 import Footer from "../../Components/Footer/Footer";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-// Styles
-const Login = () => {
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  Paper,
+  Typography,
+  Button,
+} from "@material-ui/core";
+interface LoginProps {}
+const Login: React.FC<LoginProps> = () => {
+  const [loading, setLoading] = useState(false);
   const [userInputs, setUserInputs] = useState({
     email: "",
     password: "",
@@ -23,11 +27,53 @@ const Login = () => {
 
   var uiConfig = {
     callbacks: {
-      signInSuccessWithAuthResult: function (authResult) {
+      signInSuccessWithAuthResult: (authRes) => {
         // User successfully signed in.
-        // Return type determines whether we continue the redirect automatically
-        // or whether we leave that to developer to handle.
-        return true;
+        // Create and store user account into database
+
+        const { id, name } = authRes.additionalUserInfo.profile;
+        const userObject = {
+          /* If the third party platform return id instead of email, a unique email 
+          needs to be created in the format of uniqueId + '@' + platform provider */
+          email: authRes.user.email
+            ? authRes.user.email
+            : id + "@" + authRes.additionalUserInfo.providerId,
+          emailVerified: true,
+          displayName: name,
+        };
+
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(userObject.email)
+          .set(userObject)
+          .then(() => {
+            // Initiate welcome message from admin
+            const buildDocKey = [userObject.email, "admin@portexe.com"].join(
+              ":"
+            );
+            firebase
+              .firestore()
+              .collection("chats")
+              .doc(buildDocKey)
+              .set({
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                  sender: "Admin@portexe.com",
+                  message: "It is our great pleasure to have you on board! ",
+                  timeStamp: Date.now(),
+                }),
+                users: [userObject.email, "admin@portexe.com"],
+                receiverHasRead: false,
+              });
+          })
+          .then(() => {
+            window.location.href = "/dashboard";
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        return false;
       },
       uiShown: function () {
         // The widget is rendered.
@@ -62,6 +108,7 @@ const Login = () => {
   };
   const userLogin = async (e) => {
     e.preventDefault();
+    console.log(e.target.value);
     const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!userInputs.email.match(mailFormat)) {
       setUserInputs({
@@ -69,13 +116,19 @@ const Login = () => {
         loginError: "Please enter a valid email address",
       });
     } else {
+      setLoading(true);
       await firebase
         .auth()
         .signInWithEmailAndPassword(userInputs.email, userInputs.password)
         .then(() => {
+          setUserInputs({
+            ...userInputs,
+            loginError: "",
+          });
           window.location.href = "/dashboard";
         })
         .catch((err) => {
+          setLoading(false);
           setUserInputs({
             ...userInputs,
             loginError:
@@ -83,16 +136,17 @@ const Login = () => {
           });
           console.log(err);
         });
+      setLoading(false);
     }
   };
   return (
-    <div className={Styles.main}>
+    <div>
       <img src={Logo} className={Styles.logo} alt="Logo" />
       <Footer />
-      <Paper elevation={3} className={Styles.paper}>
-        <form className={Styles.form} onSubmit={(e) => userLogin(e)}>
+      <Paper elevation={3} className={Styles.login_form}>
+        <form onSubmit={(e) => userLogin(e)}>
           {userInputs.loginError ? (
-            <span className={Styles.errorText}>{userInputs.loginError}</span>
+            <span className={Styles.warning}>{userInputs.loginError}</span>
           ) : null}
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="login-email-input">
@@ -121,10 +175,10 @@ const Login = () => {
             color="primary"
             variant="contained"
             fullWidth={true}
-            className={Styles.loginButton}
+            className={Styles.login_button}
           >
-            <AlternateEmailIcon className={Styles.emailButton} />
-            <span className={Styles.loginButtonText}>Login</span>
+            <AlternateEmailIcon className={Styles.emailIcon} />
+            <span className={Styles.login_button_text}>Login</span>
           </Button>
         </form>
 
@@ -132,9 +186,11 @@ const Login = () => {
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />
-
+        {loading ? (
+          <CircularProgress color="secondary" className={Styles.loadingGif} />
+        ) : null}
         <Typography variant="subtitle2">Don't Have An Account?</Typography>
-        <Link className={Styles.signUpLink} to="/signup">
+        <Link className={Styles.signup_link} to="/signup">
           <Typography color="textPrimary" variant="overline" display="inline">
             SIGN UP
           </Typography>

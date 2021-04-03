@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Styles from "./ChatTextBox.module.css";
+import Styles from "./ChatTextBox.module.scss";
 import TextField from "@material-ui/core/TextField";
 import Send from "@material-ui/icons/Send";
 interface ChatTextBoxProps {
@@ -22,13 +22,13 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ submitMessageFn }) => {
   };
 
   return (
-    <div className={Styles.chatTextBoxContainer}>
+    <div className={Styles.container}>
       <TextField
         id="chatTextbox"
         multiline
         rows={4}
         InputProps={{ disableUnderline: true }}
-        className={Styles.chatTextBox}
+        className={Styles.chat_box}
         placeholder="Type your message"
         onKeyUp={(e) => userTyping(e)}
       ></TextField>

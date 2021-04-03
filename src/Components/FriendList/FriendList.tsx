@@ -5,28 +5,31 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import SearchBar from "../SearchBar/SearchBar";
 import Avatar from "@material-ui/core/Avatar";
-import Styles from "./FriendList.module.css";
+import Styles from "./FriendList.module.scss";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import UserMenu from "../UserMenu/UserMenu";
+
 // **
 import DefaultAvatar from "../../Assets/DefaultAvatar/download.jpg";
 import DefaultAvatar_1 from "../../Assets/DefaultAvatar/download-1.jpg";
 import firebase from "firebase";
 
-interface ChatListProps {
-  newChatBtnFn: () => void;
-  selectChatFn: (chatIndex: any) => void;
+interface FriendProps {
+  selectChatFn: (chatIndex: number) => void;
   userEmail: String;
-  selectedChat: number | null;
+  displayName: String;
+  selectedChat: number;
   chats: firebase.firestore.DocumentData[];
 }
-const ChartList: React.FC<ChatListProps> = ({
-  newChatBtnFn,
+const ChartList: React.FC<FriendProps> = ({
   selectChatFn,
   selectedChat,
+  displayName,
   userEmail,
   chats,
-}: ChatListProps): JSX.Element => {
+}) => {
   const newChats = () => {
     console.log("new chat");
   };
@@ -42,32 +45,66 @@ const ChartList: React.FC<ChatListProps> = ({
     selected: {},
   });
   const classes = useStyles();
-
-  useEffect(() => {}, []);
-  // props for search bar component
   const [userInput, setUserInput] = useState("Search");
-  const handleUserTyping = (e) => {
-    console.log(e.target.value);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [friendList, setFriendList] = useState(chats);
+
+  useEffect(() => {
+    setFriendList(chats);
+  }, [chats]);
+  const handleUserTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let searchResult = [];
+    console.log(chats);
+    if (chats !== null && e.target.value !== "") {
+      for (let i = 0; i < chats.length; i++) {
+        if (
+          /* users involved in a conversation are the in format of sender : receiver , no matter who's the sender
+             or receiver, they all going to be displayed in the chat list of relevant user.
+             Thus,we need to perform search in both side to search for the target chat.
+          */
+          chats[i].users[0].includes(e.target.value) ||
+          chats[i].users[1].includes(e.target.value)
+        ) {
+          searchResult.push(chats[i]);
+        }
+      }
+    } else {
+      searchResult = chats;
+    }
+    setFriendList(searchResult);
   };
+  // set avatar as the anchor element, since menus open over the anchor element by default.
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
+
   return (
     <div className={Styles.container}>
-      <div className={Styles.chatHeader}>
-        <Avatar
-          variant={"rounded"}
-          src={DefaultAvatar_1}
-          className={Styles.avatar}
-        />
-        <span className={Styles.username}>{userEmail}</span>
+      <div className={Styles.chat_header}>
+        <IconButton onClick={handleClick}>
+          <Avatar
+            variant={"rounded"}
+            src={DefaultAvatar_1}
+            className={Styles.user_avatar}
+          />
+        </IconButton>
+        <UserMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+
+        {displayName === " " || null ? (
+          <span className={Styles.user_name}>{displayName}</span>
+        ) : (
+          <span className={Styles.user_name}>{displayName}</span>
+        )}
       </div>
       <SearchBar userInput={userInput} onChange={handleUserTyping} />
 
       <List>
-        {chats
-          ? chats.map((chat, index) => {
+        {friendList
+          ? friendList.map((chat, index) => {
               return (
                 <div key={index}>
                   <ListItem
-                    className={Styles.listItem}
+                    className={Styles.list_item}
                     onClick={() => selectChatFn(index)}
                     alignItems="flex-start"
                     selected={selectedChat === index}

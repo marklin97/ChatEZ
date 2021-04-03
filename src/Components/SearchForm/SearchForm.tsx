@@ -4,15 +4,15 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AddIcon from "@material-ui/icons/Add";
-import Styles from "./FormDialog.module.scss";
-interface Props {
+import Styles from "./SearchForm.module.scss";
+
+interface SearchFormProps {
   //   open: boolean;
 }
 
-const FormDialog = (props: Props) => {
+const SearchForm: React.FC<SearchFormProps> = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -64,4 +64,4 @@ const FormDialog = (props: Props) => {
   );
 };
 
-export default FormDialog;
+export default SearchForm;

@@ -1,34 +1,43 @@
 import React, { useState } from "react";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import Button from "@material-ui/core/Button";
-import Styles from "./SignUp.module.css";
+import Styles from "./SignUp.module.scss";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import Logo from "../../Assets/Images/Logo.png";
 import Footer from "../../Components/Footer/Footer";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-const SignUp = () => {
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  Paper,
+  Typography,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@material-ui/core";
+import { Class } from "@material-ui/icons";
+
+interface SignUpProps {}
+const SignUp: React.FC<SignUpProps> = () => {
   const [display, setDisplay] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userInputs, setUserInputs] = useState({
     email: "",
+    displayName: "",
     password: "",
     confirmation: "",
     signUpError: "",
   });
 
   const formValidation = () => {
+    // check if user has entered a valid email
     const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    // check if user has enter a valid email
+    // check if user has entered a displayed name
+    const nameFormat = /^[A-Z0-9]{6,18}$/gim;
 
     if (!userInputs.email.match(mailFormat)) {
       setUserInputs({
@@ -37,41 +46,50 @@ const SignUp = () => {
       });
       return false;
       // check if passwords matches confirmation
+    } else if (!userInputs.displayName.match(nameFormat)) {
+      setUserInputs({
+        ...userInputs,
+        signUpError:
+          "Please enter a display name 6-18 characters long. \n Your display name can be any combination of letters and numbers  ",
+      });
+      return false;
     } else if (userInputs.password !== userInputs.confirmation) {
       setUserInputs({
         ...userInputs,
         signUpError:
-          "Short passwords are easy to guess. Try one with at least 8 characters.",
+          "Short passwords are easy to guess. Try one with at least 6 characters.",
       });
       return false;
     }
     return true;
   };
 
-  const submitSignUp = (e) => {
+  const submitSignUp = async (e) => {
     e.preventDefault();
 
     if (formValidation()) {
       // after successfully registered an user, firebase will return an user object
-
-      firebase
+      setUserInputs({ ...userInputs, signUpError: "" });
+      setLoading(true);
+      await firebase
         .auth()
         .createUserWithEmailAndPassword(userInputs.email, userInputs.password)
-        .then((authRes) => {
+        .then(async (authRes) => {
           if (authRes.user?.email) {
             setDisplay(true);
             const userObject = {
               email: authRes.user?.email,
-              emailVerified: false,
+              emailVerified: true,
+              displayName: userInputs.displayName,
             };
-            firebase
+
+            await firebase
               .firestore()
               .collection("users")
               .doc(userInputs.email)
               .set(userObject)
               .then(() => {
                 sendVerification(firebase.auth().currentUser);
-                // redirect user to the dashboard page after 5 seconds
               })
               .catch((err) => {
                 setUserInputs({
@@ -80,19 +98,38 @@ const SignUp = () => {
                 });
                 console.log(err);
               });
+            const buildDocKey = [userObject.email, "admin@portexe.com"].join(
+              ":"
+            );
+            await firebase
+              .firestore()
+              .collection("chats")
+              .doc(buildDocKey)
+              .set({
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                  sender: "Admin@portexe.com",
+                  message: "It is our great pleasure to have you on board! ",
+                  timeStamp: Date.now(),
+                }),
+                users: [userObject.email, "admin@portexe.com"],
+                receiverHasRead: false,
+              });
           }
         })
         .catch((error) => {
           setUserInputs({ ...userInputs, signUpError: error.message });
+          setLoading(false);
           console.log(error);
         });
     }
   };
   const handleRedirection = () => {
     setDisplay(false);
+    setLoading(true);
     // redirect user to the dashboard page after 2 seconds
     setTimeout(() => {
       window.location.href = "/dashboard";
+      setLoading(false);
     }, 2000);
   };
   const userTyping = (input, e) => {
@@ -105,6 +142,10 @@ const SignUp = () => {
         break;
       case "password-confirmation":
         setUserInputs({ ...userInputs, confirmation: e.target.value });
+        break;
+      case "displayName":
+        setUserInputs({ ...userInputs, displayName: e.target.value });
+        // console.log(userInputs.displayName);
         break;
       default:
         break;
@@ -123,18 +164,18 @@ const SignUp = () => {
   };
 
   return (
-    <div className={Styles.main}>
+    <div>
       <img src={Logo} className={Styles.logo} alt="Logo" />
 
-      <Paper className={Styles.paper}>
+      <Paper variant="outlined" className={Styles.signup_form}>
         {userInputs.signUpError ? (
-          <span className={Styles.errorText}>{userInputs.signUpError}</span>
+          <span className={Styles.warning}>{userInputs.signUpError}</span>
         ) : null}
+
         <form
           onSubmit={(e) => {
             submitSignUp(e);
           }}
-          className={Styles.form}
         >
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="signup-email-input">
@@ -155,7 +196,7 @@ const SignUp = () => {
               autoComplete="name"
               autoFocus
               id="signup-displayName-input"
-              onChange={(e) => userTyping("email", e)}
+              onChange={(e) => userTyping("displayName", e)}
             ></Input>
           </FormControl>
 
@@ -188,28 +229,27 @@ const SignUp = () => {
             color="primary"
             variant="contained"
             style={{ marginTop: "20px" }}
-            className={Styles.signUpButton}
           >
             <AlternateEmailIcon className={Styles.emailIcon} />
-            <span className={Styles.signUpButtonText}>Sign Up</span>
+            Sign Up
           </Button>
           <Dialog open={display} maxWidth={"xs"}>
-            <DialogTitle className={Styles.dialogTitle}>
-              <span style={{ color: "green" }}>
-                <CheckCircleOutlineIcon
-                  fontSize={"large"}
-                  className={Styles.checkIcon}
-                />{" "}
-                Thanks your account has been successfully created !
+            <DialogTitle>
+              <CheckCircleOutlineIcon
+                fontSize={"default"}
+                className={Styles.checkIcon}
+              />
+              <span className={Styles.notification_title}>
+                Your account has been successfully created !
               </span>
             </DialogTitle>
 
-            <DialogContent className={Styles.dialogContent}>
-              <DialogContentText>
+            <DialogContent>
+              <span className={Styles.notification_text}>
                 Please check your inbox, an activation link has been sent to
                 your registered email, which needs to be activated before you
                 progress further.
-              </DialogContentText>
+              </span>
             </DialogContent>
 
             <Button color="primary" onClick={handleRedirection}>
@@ -217,13 +257,17 @@ const SignUp = () => {
             </Button>
           </Dialog>
         </form>
-        <h5 className={Styles.userRegistered}>Already have an account?</h5>
-        <Link className={Styles.loginLink} to="/login">
+        {loading ? (
+          <CircularProgress color="secondary" className={Styles.loadingGif} />
+        ) : null}
+        <h5>Already have an account?</h5>
+        <Link className={Styles.login_link} to="/login">
           <Typography color="textPrimary" variant="overline" display="inline">
             Login
           </Typography>
         </Link>
       </Paper>
+
       <Footer />
     </div>
   );

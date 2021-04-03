@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
-import Styles from "./ChatView.module.css";
+import Styles from "./ChatView.module.scss";
 // import FaceTwoToneIcon from "@material-ui/icons/FaceTwoTone";
 // import ChatRoundedIcon from "@material-ui/icons/ChatRounded";
 import ChatTextBox from "../ChatTextBox/ChatTextBox";
@@ -38,8 +38,12 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
   } else {
     return (
       <div className={Styles.container}>
-        <div className={Styles.chatHeader}>
-          {/* <button
+        <div className={Styles.chat_header}>
+          <span className={Styles.user_name}>
+            {chat.users.filter((users) => users !== user)}{" "}
+          </span>
+        </div>
+        {/* <button
             className={Styles.btn}
             style={{ color: btnColor.chatIcon }}
             onClick={onChatClick}
@@ -54,24 +58,23 @@ const ChatView: React.FC<ChatViewProps> = ({ user, chat, submitMessageFn }) => {
             <FaceTwoToneIcon fontSize="large" className={Styles.iconBtn} />
           </button> */}
 
-          {/* Your conversation with{" "}
+        {/* Your conversation with{" "}
                 {chat.users.filter((users) => users !== user)} */}
-          <span className={Styles.username}>
-            {chat.users.filter((users) => users !== user)}{" "}
-          </span>
-        </div>
 
         <div className={Styles.conversation} id="chatView-container">
+          <div className={Styles.spacing}></div>
           {chat.messages.map((msg, index) => {
             return (
               <div key={index}>
                 <div
                   key={index}
                   className={
-                    msg.sender === user ? Styles.userSent : Styles.friendSent
+                    msg.sender === user
+                      ? Styles.user_message
+                      : Styles.friend_message
                   }
                 >
-                  <span className={Styles.messageText}>{msg.message}</span>
+                  <span className={Styles.message_text}>{msg.message}</span>
                 </div>
               </div>
             );

@@ -1,0 +1,32 @@
+@import "../../Constant/colors.module.scss";
+.login_form {
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 30px;
+  width: 25%;
+}
+.emailIcon {
+  margin-right: 2%;
+}
+.login_button {
+  margin-top: 2%;
+  height: 40px;
+}
+.login_button_text {
+  margin-right: 5%;
+}
+.logo {
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin-left: 5%;
+}
+.signup_link {
+  user-select: none;
+}
+.warning {
+  color: $red;
+  font-size: 0.8rem;
+}

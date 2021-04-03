@@ -1,5 +1,6 @@
+@import "../../Constant/colors.module.scss";
 .sendBtn {
-  color: grey;
+  color: $grey;
   cursor: pointer;
   transition: 1s;
   right: 7%;
@@ -7,17 +8,17 @@
   position: absolute;
 }
 .sendBtn:hover {
-  color: #00c1ff;
+  color: $blue;
 }
-.chatTextBoxContainer {
+.container {
   position: fixed;
-  height: 20%;
+  height: 25%;
   box-sizing: border-box;
   width: 50%;
-  border: 0.05rem solid lightgray;
-  background-color: rgb(247, 247, 247);
+  border: 0.05rem solid $light-grey;
+  background-color: $white-1;
   border-radius: 0rem 0rem 0.3rem 0rem;
 }
-.chatTextBox {
+.chat_box {
   width: calc(100% - 25px);
 }
