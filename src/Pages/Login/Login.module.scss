@@ -1,11 +1,23 @@
 @import "../../Constant/colors.module.scss";
+body {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
 .login_form {
-  margin-top: 5%;
-  margin-left: auto;
-  margin-right: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 80px;
+  margin: auto;
   text-align: center;
   padding: 30px;
   width: 25%;
+  min-width: 330px;
+  max-height: 410px;
+  overflow: auto;
 }
 .emailIcon {
   margin-right: 2%;
@@ -18,7 +30,7 @@
   margin-right: 5%;
 }
 .logo {
-  float: left;
+  z-index: 1;
   width: 150px;
   height: 150px;
   margin-left: 5%;

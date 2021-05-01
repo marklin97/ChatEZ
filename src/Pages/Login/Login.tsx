@@ -1,13 +1,16 @@
+/* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
+/** This section will include all the necessary dependence for this tsx file */
 import React, { useState } from "react";
 import Styles from "./Login.module.scss";
 import { Link } from "../../../node_modules/react-router-dom";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import Logo from "../../Assets/Images/Logo.png";
+// import Logo from "../../Assets/Images/Logo.png";
 import Footer from "../../Components/Footer/Footer";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
-import CircularProgress from "@material-ui/core/CircularProgress";
-
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../Store/rootReducer";
+import * as actions from "../../Store/LoginModule/actions";
 import {
   FormControl,
   InputLabel,
@@ -15,19 +18,50 @@ import {
   Paper,
   Typography,
   Button,
+  CircularProgress,
 } from "@material-ui/core";
-interface LoginProps {}
-const Login: React.FC<LoginProps> = () => {
+
+/* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
+/*********
+/*********
+/*********/
+/* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
+const Login = (): JSX.Element => {
+  const dispatch = useDispatch();
+  /**
+   * This is user's current login status
+   * */
+  const loginError = useSelector(
+    (state: RootState) => state.loginReducer.errorMsg
+  );
+
+  /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
+  /************* This section will include this component HOOK function *************/
+
+  /**
+   *  This hook holds the state of display of loading widget
+   * */
   const [loading, setLoading] = useState(false);
+  /**
+   *  This hook holds the state of user inputs
+   *  This state will handle by redux in future
+   * */
   const [userInputs, setUserInputs] = useState({
     email: "",
     password: "",
-    loginError: "",
+    inputError: "",
   });
+  /* <------------------------------------ **** HOOKS END **** ------------------------------------ */
 
-  var uiConfig = {
+  /* <------------------------------------ **** FUNCTION START **** ------------------------------------ */
+  /************* This section will include this component general function *************/
+  /**
+   * This is a callback function to be invoked after user has successfully login
+   * */
+
+  const uiConfig = {
     callbacks: {
-      signInSuccessWithAuthResult: (authRes) => {
+      signInSuccessWithAuthResult: (authRes: any) => {
         // User successfully signed in.
         // Create and store user account into database
 
@@ -40,45 +74,14 @@ const Login: React.FC<LoginProps> = () => {
             : id + "@" + authRes.additionalUserInfo.providerId,
           emailVerified: true,
           displayName: name,
+          gender: "male",
+          description: "",
+          birthday: "",
         };
-
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(userObject.email)
-          .set(userObject)
-          .then(() => {
-            // Initiate welcome message from admin
-            const buildDocKey = [userObject.email, "admin@portexe.com"].join(
-              ":"
-            );
-            firebase
-              .firestore()
-              .collection("chats")
-              .doc(buildDocKey)
-              .set({
-                messages: firebase.firestore.FieldValue.arrayUnion({
-                  sender: "Admin@portexe.com",
-                  message: "It is our great pleasure to have you on board! ",
-                  timeStamp: Date.now(),
-                }),
-                users: [userObject.email, "admin@portexe.com"],
-                receiverHasRead: false,
-              });
-          })
-          .then(() => {
-            window.location.href = "/dashboard";
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-
+        // initiate welcome message from admin
+        dispatch(actions.thirdPtyLoginAction(userObject));
+        setLoading(true);
         return false;
-      },
-      uiShown: function () {
-        // The widget is rendered.
-        // Hide the loader.
-        // document.getElementById("loader").style.display = "none";
       },
     },
     // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
@@ -94,7 +97,11 @@ const Login: React.FC<LoginProps> = () => {
     // Privacy policy url.
     privacyPolicyUrl: "<your-privacy-policy-url>",
   };
-  const userTyping = (input, e) => {
+
+  /**
+   * This is an function to handle user typing in the login form
+   * */
+  const userTyping = (input: string, e) => {
     switch (input) {
       case "email":
         setUserInputs({ ...userInputs, email: e.target.value });
@@ -106,48 +113,42 @@ const Login: React.FC<LoginProps> = () => {
         break;
     }
   };
+
+  /**
+   * This is an function to handle user's login operation with email and password
+   * */
   const userLogin = async (e) => {
     e.preventDefault();
-    console.log(e.target.value);
     const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!userInputs.email.match(mailFormat)) {
       setUserInputs({
         ...userInputs,
-        loginError: "Please enter a valid email address",
+        inputError: "Please enter a valid email address",
       });
     } else {
       setLoading(true);
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(userInputs.email, userInputs.password)
-        .then(() => {
-          setUserInputs({
-            ...userInputs,
-            loginError: "",
-          });
-          window.location.href = "/dashboard";
-        })
-        .catch((err) => {
-          setLoading(false);
-          setUserInputs({
-            ...userInputs,
-            loginError:
-              "The email and password you entered did not match our records. Please double check and try again.",
-          });
-          console.log(err);
-        });
-      setLoading(false);
+      dispatch(actions.userLoginAction(userInputs));
     }
   };
+  /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
+
   return (
     <div>
-      <img src={Logo} className={Styles.logo} alt="Logo" />
+      {/* <img src={Logo} className={Styles.logo} alt="Logo" /> */}
       <Footer />
       <Paper elevation={3} className={Styles.login_form}>
-        <form onSubmit={(e) => userLogin(e)}>
-          {userInputs.loginError ? (
-            <span className={Styles.warning}>{userInputs.loginError}</span>
-          ) : null}
+        <form
+          onSubmit={(e) => {
+            // userLogin(e);
+            userLogin(e);
+          }}
+        >
+          {userInputs.inputError ? (
+            <span className={Styles.warning}>{userInputs.inputError}</span>
+          ) : (
+            <span className={Styles.warning}>{loginError}</span>
+          )}
+
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="login-email-input">
               Email Address
@@ -186,7 +187,7 @@ const Login: React.FC<LoginProps> = () => {
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />
-        {loading ? (
+        {!loginError && loading ? (
           <CircularProgress color="secondary" className={Styles.loadingGif} />
         ) : null}
         <Typography variant="subtitle2">Don't Have An Account?</Typography>
@@ -201,3 +202,4 @@ const Login: React.FC<LoginProps> = () => {
 };
 
 export default Login;
+/* <------------------------------------ **** FUNCTION COMPONENT END **** ------------------------------------ */

@@ -1,0 +1,120 @@
+/**
+* file: Page Loading animation style file
+*/
+
+.loadingWrapper {
+  height: 100vh;
+}
+.loadingFormCol {
+  width: 100%;
+}
+
+.loadingPageWrapper {
+  margin: auto;
+  margin-top: 30vh;
+  width: 90%;
+  text-align: center;
+}
+.loadingPageTitle {
+  font-family: "Lucida Console", "Courier New", cursive;
+  letter-spacing: 1rem;
+  margin-top: 0.5rem;
+  color: #fd6b0b;
+  font-weight: 600;
+  font-size: 50px;
+  @media screen and (max-width: 767px) {
+    font-size: 40px;
+  }
+}
+.loadingAnimation {
+  font-family: Lucida Console, Courier New, monospace;
+  font-size: 14px;
+  margin: auto;
+  font-weight: bold;
+  margin-top: 3rem;
+}
+.cubeGrid {
+  width: 60px;
+  height: 60px;
+  margin: 15px auto;
+}
+
+@mixin loadingCube {
+  width: 33%;
+  height: 33%;
+  background-color: #fd6b0b;
+  float: left;
+  -webkit-animation: loadingCubeGridScaleDelay 1.3s infinite ease-in-out;
+  animation: loadingCubeGridScaleDelay 1.3s infinite ease-in-out;
+}
+.loadingCube1 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+.loadingCube2 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+.loadingCube3 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.4s;
+  animation-delay: 0.4s;
+}
+.loadingCube4 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+.loadingCube5 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+.loadingCube6 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+.loadingCube7 {
+  @include loadingCube;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+.loadingCube8 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+.loadingCube9 {
+  @include loadingCube;
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+@-webkit-keyframes loadingCubeGridScaleDelay {
+  0%,
+  70%,
+  100% {
+    -webkit-transform: scale3D(1, 1, 1);
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    -webkit-transform: scale3D(0, 0, 1);
+    transform: scale3D(0, 0, 1);
+  }
+}
+
+@keyframes loadingCubeGridScaleDelay {
+  0%,
+  70%,
+  100% {
+    -webkit-transform: scale3D(1, 1, 1);
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    -webkit-transform: scale3D(0, 0, 1);
+    transform: scale3D(0, 0, 1);
+  }
+}

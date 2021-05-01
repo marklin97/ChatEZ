@@ -1,38 +1,92 @@
+/* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
+/** This section will include all the necessary dependence for this tsx file */
 import React, { useState, useEffect } from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import SearchBar from "../SearchBar/SearchBar";
-import Avatar from "@material-ui/core/Avatar";
 import Styles from "./FriendList.module.scss";
-import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
 import UserMenu from "../UserMenu/UserMenu";
-
-// **
+import UserAvatar from "../UserAvatar/UserAvatar";
 import DefaultAvatar from "../../Assets/DefaultAvatar/download.jpg";
-import DefaultAvatar_1 from "../../Assets/DefaultAvatar/download-1.jpg";
 import firebase from "firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../Store/rootReducer";
+import * as actions from "../../Store/UserModule/actions";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Divider,
+  IconButton,
+} from "@material-ui/core";
+import axios, { AxiosRequestConfig } from "axios";
+/* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
+/*********
+/*********
+/*********/
 
-interface FriendProps {
+/* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
+/** This section will include all the necessary interface for this tsx file */
+interface FriendListProps {
   selectChatFn: (chatIndex: number) => void;
-  userEmail: String;
-  displayName: String;
+  userEmail: string;
   selectedChat: number;
   chats: firebase.firestore.DocumentData[];
+  userProfile: any;
 }
-const ChartList: React.FC<FriendProps> = ({
+/* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
+/*********
+/*********
+/*********/
+/* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
+const FriendList: React.FC<FriendListProps> = ({
   selectChatFn,
   selectedChat,
-  displayName,
   userEmail,
+  userProfile,
   chats,
 }) => {
-  const newChats = () => {
-    console.log("new chat");
-  };
+  /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
+  const dispatch = useDispatch();
+  /**
+   * This is user's current avatar
+   * */
+
+  const avatar = useSelector(
+    (state: RootState) => state.userProfileReducer.avatar
+  );
+
+  /************* This section will include this component HOOK function *************/
+  /**
+   *  This hook holds the anchor element for Menu component
+   *  Material UI Menu component opens next to the anchor element by default
+   * */
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  /**
+   *  This hook holds the user avatar file
+   * */
+  /**
+   *  This hook holds the current list of friends
+   *  This hook is invoked every time user adds a new friend or typing in the search bar
+   * */
+  const [friendList, setFriendList] = useState(chats);
+  /**
+   *  This hook is invoked every time the user visits the page, or user's friend list changes
+   *  This hook retrieves user avatar & profile
+   * */
+  useEffect(() => {
+    dispatch(actions.getAvatarAction(userEmail));
+    setFriendList(chats);
+  }, [chats]);
+  /* <------------------------------------ **** HOOKS END **** ------------------------------------ */
+  /*
+   */
+  /* <------------------------------------ **** FUNCTION START **** ------------------------------------ */
+  /************* This section will include this component general function *************/
+
+  /**
+   * This is a function to customized the material ui component
+   * */
   const useStyles = makeStyles({
     root: {
       "&$selected": {
@@ -45,13 +99,11 @@ const ChartList: React.FC<FriendProps> = ({
     selected: {},
   });
   const classes = useStyles();
-  const [userInput, setUserInput] = useState("Search");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [friendList, setFriendList] = useState(chats);
 
-  useEffect(() => {
-    setFriendList(chats);
-  }, [chats]);
+  /**
+   * This function is to handle search input
+   * This function is invoked every time user types in search form
+   */
   const handleUserTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     let searchResult = [];
     console.log(chats);
@@ -73,34 +125,44 @@ const ChartList: React.FC<FriendProps> = ({
     }
     setFriendList(searchResult);
   };
-  // set avatar as the anchor element, since menus open over the anchor element by default.
+  /**
+   * This function handles user click on avatar
+   */
+  // set avatar as the anchor element,menu opens next to the anchor element by default.
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
   };
+  /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
 
   return (
     <div className={Styles.container}>
       <div className={Styles.chat_header}>
         <IconButton onClick={handleClick}>
-          <Avatar
-            variant={"rounded"}
-            src={DefaultAvatar_1}
-            className={Styles.user_avatar}
-          />
+          <UserAvatar imgSrc={avatar} variant={"rounded"} />
         </IconButton>
-        <UserMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <UserMenu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          userEmail={userEmail}
+          imgSrc={avatar}
+          userProfile={userProfile}
+        />
 
-        {displayName === " " || null ? (
-          <span className={Styles.user_name}>{displayName}</span>
+        {userProfile.displayName === " " || null ? (
+          <span className={Styles.user_name}>{userEmail}</span>
         ) : (
-          <span className={Styles.user_name}>{displayName}</span>
+          <span className={Styles.user_name}>{userProfile.displayName}</span>
         )}
       </div>
-      <SearchBar userInput={userInput} onChange={handleUserTyping} />
+      <SearchBar onChange={handleUserTyping} />
 
       <List>
         {friendList
           ? friendList.map((chat, index) => {
+              let friendEmail = chat.users.filter(
+                (user) => user !== userEmail
+              )[0];
+
               return (
                 <div key={index}>
                   <ListItem
@@ -111,11 +173,7 @@ const ChartList: React.FC<FriendProps> = ({
                     classes={{ root: classes.root, selected: classes.selected }}
                   >
                     <ListItemAvatar>
-                      <Avatar
-                        variant={"rounded"}
-                        // use default avatar if use has not set his own
-                        src={DefaultAvatar}
-                      />
+                      <UserAvatar userEmail={friendEmail} variant={"rounded"} />
                     </ListItemAvatar>
                     <ListItemText
                       primary={
@@ -141,5 +199,5 @@ const ChartList: React.FC<FriendProps> = ({
     </div>
   );
 };
-
-export default ChartList;
+export default FriendList;
+/* <------------------------------------ **** FUNCTION COMPONENT END **** ------------------------------------ */

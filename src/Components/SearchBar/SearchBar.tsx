@@ -1,21 +1,31 @@
+/* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
+/** This section will include all the necessary dependence for this tsx file */
 import React from "react";
 import Styles from "./SearchBar.module.scss";
 import SearchIcon from "@material-ui/icons/Search";
 import SearchForm from "../SearchForm/SearchForm";
-
+/* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
+/*********
+/*********
+/*********/
+/* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
+/** This section will include all the necessary interface for this tsx file */
 interface SearchBarProps {
-  userInput: String;
   onChange(e: any): void;
 }
+/* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
+/*********
+/*********
+/*********/
+/* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
 
-const SearchBar: React.FC<SearchBarProps> = ({ userInput, onChange }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onChange }) => {
   return (
     <div className={Styles.container}>
       <SearchIcon className={Styles.searchIcon} />
 
       <input
         className={Styles.input_field}
-        // value={"        " + userInput}
         onChange={onChange}
         placeholder={"Search"}
       />
@@ -24,5 +34,5 @@ const SearchBar: React.FC<SearchBarProps> = ({ userInput, onChange }) => {
     </div>
   );
 };
-
 export default SearchBar;
+/* <------------------------------------ **** FUNCTION COMPONENT END **** ------------------------------------ */

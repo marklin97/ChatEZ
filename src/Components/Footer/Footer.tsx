@@ -1,8 +1,15 @@
+/* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
+/** This section will include all the necessary dependence for this tsx file */
 import { Button } from "@material-ui/core";
 import React from "react";
 import Styles from "./Footer.module.scss";
-interface FooterProps {}
-const Footer: React.FC<FooterProps> = () => {
+/* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
+/*********
+/*********
+/*********/
+/* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
+
+const Footer = (): JSX.Element => {
   return (
     <div className={Styles.footer_container}>
       <Button>
@@ -22,5 +29,5 @@ const Footer: React.FC<FooterProps> = () => {
     </div>
   );
 };
-
 export default Footer;
+/* <------------------------------------ **** FUNCTION COMPONENT END **** ------------------------------------ */
