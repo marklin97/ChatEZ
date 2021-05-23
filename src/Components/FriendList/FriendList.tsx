@@ -11,6 +11,7 @@ import firebase from "firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Store/rootReducer";
 import * as actions from "../../Store/UserModule/actions";
+import * as actions1 from "../../Store/FriendModule/actions";
 import {
   List,
   ListItem,
@@ -53,7 +54,7 @@ const FriendList: React.FC<FriendListProps> = ({
    * */
 
   const avatar = useSelector(
-    (state: RootState) => state.userProfileReducer.avatar
+    (state: RootState) => state.friendReducer.friends[userEmail]?.profile.avatar
   );
 
   /************* This section will include this component HOOK function *************/
@@ -76,6 +77,7 @@ const FriendList: React.FC<FriendListProps> = ({
    * */
   useEffect(() => {
     dispatch(actions.getAvatarAction(userEmail));
+    dispatch(actions1.getProfileAction(userEmail));
     setFriendList(chats);
   }, [chats]);
   /* <------------------------------------ **** HOOKS END **** ------------------------------------ */

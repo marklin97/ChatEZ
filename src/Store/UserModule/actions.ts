@@ -111,6 +111,70 @@ const getMsgFailAction = (errorMsg: string): types.GetMessageActionTypes => {
     },
   };
 };
+/**
+ * Update User Profile Action
+ */
+const updateProfileAction = (
+  imgFile: File,
+  email: string,
+  profile: {
+    gender: string;
+    description: string;
+    birthday: string;
+  }
+): types.UpdateProfileActionTypes => {
+  return {
+    type: types.UPDATEPROFILE,
+    payload: {
+      email: email,
+      imgFile: imgFile,
+      profile: {
+        // displayName: profile.displayName,
+        gender: profile.gender,
+        description: profile.description,
+        birthday: profile.birthday,
+      },
+    },
+  };
+};
+/**
+ * Update User Profile Success Action
+ */
+const updateProfileSuccessAction = (
+  avatar: string,
+  profile: {
+    gender: string;
+    description: string;
+    birthday: string;
+  }
+): types.UpdateProfileActionTypes => {
+  return {
+    type: types.UPDATEPROFILE_SUCCEED,
+    payload: {
+      avatar: avatar,
+      profile: {
+        // displayName: profile.displayName,
+        gender: profile.gender,
+        description: profile.description,
+        birthday: profile.birthday,
+      },
+    },
+  };
+};
+/**
+ * Update User Profile Fail Action
+ */
+const updateProfileFailAction = (
+  errorMsg: string
+): types.UpdateProfileActionTypes => {
+  return {
+    type: types.UPDATEPROFILE_FAIL,
+    payload: {
+      errorMsg: errorMsg,
+    },
+  };
+};
+
 export {
   getAvatarAction,
   getAvatarSuccessAction,
@@ -121,4 +185,7 @@ export {
   getMsgAction,
   getMsgSuccessAction,
   getMsgFailAction,
+  updateProfileAction,
+  updateProfileSuccessAction,
+  updateProfileFailAction,
 };

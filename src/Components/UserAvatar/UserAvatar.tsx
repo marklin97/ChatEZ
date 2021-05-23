@@ -7,6 +7,8 @@ import { Avatar } from "@material-ui/core/";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Store/rootReducer";
 import DefaultAvatar from "../../Assets/DefaultAvatar/download-1.jpg";
+import * as actions from "../../Store/FriendModule/actions";
+
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /*********
 /*********
@@ -37,7 +39,8 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
    * This is user's current login status
    * */
   const userAvatar = useSelector(
-    (state: RootState) => state.userProfileReducer.avatar
+    // (state: RootState) => state.userReducer.avatar
+    (state: RootState) => state.friendReducer.friends[userEmail]?.profile.avatar
   );
   /************* This section will include this component HOOK function *************/
   /**
@@ -53,7 +56,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
    *  This hook invokes every-time user email gets changed
    * */
   useEffect(() => {
-    getUserAvatar(userEmail);
+    dispatch(actions.getAvatarAction(userEmail));
     getStyle(size);
   }, [userEmail]);
   /* <------------------------------------ **** HOOKS END **** ------------------------------------ */
@@ -101,8 +104,11 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
 
   if (imgSrc) {
     return <Avatar variant={variant} src={imgSrc} style={imgStyle}></Avatar>;
-  } else if (avatar) {
-    return <Avatar variant={variant} src={avatar} style={imgStyle}></Avatar>;
+  } else if (userAvatar) {
+    //return <Avatar variant={variant} src={avatar} style={imgStyle}></Avatar>;
+    return (
+      <Avatar variant={variant} src={userAvatar} style={imgStyle}></Avatar>
+    );
   } else {
     return (
       <Avatar variant={variant} src={DefaultAvatar} style={imgStyle}></Avatar>

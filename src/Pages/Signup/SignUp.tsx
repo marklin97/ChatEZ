@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Styles from "./SignUp.module.scss";
 import { Link } from "react-router-dom";
-import Logo from "../../Assets/Images/Logo.png";
+// import Logo from "../../Assets/Images/Logo.png";
 import Footer from "../../Components/Footer/Footer";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";

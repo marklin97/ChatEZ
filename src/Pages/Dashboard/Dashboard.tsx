@@ -7,6 +7,10 @@ import firebase from "firebase";
 import Styles from "./Dashboard.module.scss";
 import { timeStamp } from "console";
 import Grid from "@material-ui/core/Grid";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../Store/rootReducer";
+import * as actions from "../../Store/FriendModule/actions";
+
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /*********
 /*********
@@ -31,6 +35,14 @@ interface userProfile {
 /*********/
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
 const Dashboard = (): JSX.Element => {
+  const dispatch = useDispatch();
+  /**
+   * This is current state of user profile
+   */
+  const user_profile = useSelector(
+    (state: RootState) => state.userReducer.profile
+  );
+
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
   /************* This section will include this component HOOK function *************/
   /**
@@ -57,9 +69,6 @@ const Dashboard = (): JSX.Element => {
     description: "",
   });
 
-  // Destructure of userProfile
-  const { displayName, birthday, gender, description } = userProfile;
-
   /**
    * This is a hook to retrieve user's profile & friend list when authorized user visits the page
    * */
@@ -75,7 +84,9 @@ const Dashboard = (): JSX.Element => {
           email = user.providerData[0].uid + "@" + "facebook.com";
         }
         // retrieve user profile data
-        getUserProfile(email);
+        // dispatch(actions1.;
+        dispatch(actions.getFriendsAction(email));
+        // dispatch(actions.getProfileAction(email));
         // retrieve history ages
         getHistoryMsg(email);
       }
@@ -100,22 +111,22 @@ const Dashboard = (): JSX.Element => {
    * This is a function to handle user's operation for sending message to other
    * This function will be handle by the saga in the future
    * */
-  const getUserProfile = async (email: string) => {
-    await firebase
-      .firestore()
-      .collection("users")
-      .where("email", "==", email)
-      .onSnapshot(async (res) => {
-        let profile = res.docs.map((doc) => doc.data());
-        setUserProfile({
-          ...userProfile,
-          displayName: profile[0].displayName,
-          gender: profile[0].gender,
-          birthday: profile[0].birthday,
-          description: profile[0].description,
-        });
-      });
-  };
+  // const getUserProfile = async (email: string) => {
+  //   await firebase
+  //     .firestore()
+  //     .collection("users")
+  //     .where("email", "==", email)
+  //     .onSnapshot(async (res) => {
+  //       let profile = res.docs.map((doc) => doc.data());
+  //       setUserProfile({
+  //         ...userProfile,
+  //         displayName: profile[0].displayName,
+  //         gender: profile[0].gender,
+  //         birthday: profile[0].birthday,
+  //         description: profile[0].description,
+  //       });
+  //     });
+  // };
   /**
    * This is a function to retrieve user's involved conversation and past message
    * This function will be handle by the saga in the future
@@ -128,7 +139,6 @@ const Dashboard = (): JSX.Element => {
       .where("users", "array-contains", email)
       .onSnapshot(async (res) => {
         let chats = res.docs.map((doc) => doc.data());
-
         setChatState({
           ...chatState,
           chats: chats,
@@ -181,7 +191,7 @@ const Dashboard = (): JSX.Element => {
             selectChatFn={selectChat}
             userEmail={email}
             chats={chats}
-            userProfile={userProfile}
+            userProfile={user_profile}
             selectedChat={selectedChat}
           />
         </Grid>

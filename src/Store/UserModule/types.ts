@@ -4,7 +4,7 @@
 const GETAVATAR = "GETAVATAR";
 const GETPROFILE = "GETPROFILE";
 const GETMESSAGE = "GETMESSAGE";
-
+const UPDATEPROFILE = "UPDATEPROFILE";
 /**
  * Action types listen by Reducer
  */
@@ -17,16 +17,21 @@ const GETPROFILE_FAILED = "GETPROFILE_FAILED";
 const GETMESSAGE_SUCCEED = "GETMESSAGE_SUCCEED";
 const GETMESSAGE_FAILED = "GETMESSAGE_FAILED";
 
+const UPDATEPROFILE_SUCCEED = "UPDATEPROFILE_SUCCEED";
+const UPDATEPROFILE_FAIL = "UPDATEPROFILE_FAIL";
 export {
   GETAVATAR,
   GETPROFILE,
   GETMESSAGE,
+  UPDATEPROFILE,
   GETAVATAR_SUCCEED,
   GETAVATAR_FAILED,
   GETPROFILE_SUCCEED,
   GETPROFILE_FAILED,
   GETMESSAGE_SUCCEED,
   GETMESSAGE_FAILED,
+  UPDATEPROFILE_SUCCEED,
+  UPDATEPROFILE_FAIL,
 };
 /**
  * This action will dispatch an Get Avatar action with the payload to saga
@@ -110,18 +115,58 @@ export type GetMessageActionTypes =
   | GetMessageSuccessAction
   | GetMessageFailAction;
 
-export type UserProfileActiontypes =
+interface UpdateProfileAction {
+  type: typeof UPDATEPROFILE;
+  payload: {
+    imgFile?: File;
+    email?: string;
+    profile?: {
+      // displayName: string;
+      gender?: string;
+      description?: string;
+      birthday?: string;
+    };
+  };
+}
+interface UpdateProfileSuccessAction {
+  type: typeof UPDATEPROFILE_SUCCEED;
+  payload: {
+    avatar: string;
+    profile: {
+      // displayName: string;
+      gender: string;
+      description: string;
+      birthday: string;
+    };
+  };
+}
+interface UpdateProfileFailAction {
+  type: typeof UPDATEPROFILE_FAIL;
+  payload: {
+    errorMsg: string;
+  };
+}
+export type UpdateProfileActionTypes =
+  | UpdateProfileAction
+  | UpdateProfileSuccessAction
+  | UpdateProfileFailAction;
+
+export type UserProfileActionTypes =
   | GetMessageActionTypes
   | GetProfileActionTypes
-  | GetAvatarActionTypes;
+  | GetAvatarActionTypes
+  | UpdateProfileActionTypes;
 
-export interface UserProfileReducer {
+export interface UserReducer {
   email: string;
   avatar: string;
+  imgFile: any;
   messages: object;
-  displayName: string;
-  gender: string;
-  description: string;
-  birthday: string;
   errorMsg: string;
+  profile: {
+    displayName: string;
+    gender: string;
+    description: string;
+    birthday: string;
+  };
 }
