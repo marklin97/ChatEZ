@@ -1,5 +1,5 @@
 @import "../../Constant/colors.module.scss";
-.footer_container {
+.footer {
   margin-left: 3%;
   position: absolute;
   bottom: 8%;
@@ -15,12 +15,13 @@
   padding-left: 5px;
   padding-right: 5px;
 }
-.button_separator {
+.footer_separator {
   color: $white-1;
 }
-.copyright {
+.footer_copyright {
   color: $white-1;
   font-size: 0.7rem;
   position: absolute;
+  margin-top: 8px;
   right: 100px;
 }

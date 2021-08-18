@@ -1,16 +1,6 @@
 @import "../../Constant/colors.module.scss";
-.sendBtn {
-  color: $grey;
-  cursor: pointer;
-  transition: 1s;
-  right: 7%;
-  bottom: 10%;
-  position: absolute;
-}
-.sendBtn:hover {
-  color: $blue;
-}
-.container {
+.chatBox {
+  overflow: hidden;
   position: fixed;
   height: 25%;
   box-sizing: border-box;
@@ -18,7 +8,17 @@
   border: 0.05rem solid $light-grey;
   background-color: $white-1;
   border-radius: 0rem 0rem 0.3rem 0rem;
+  min-width: 400px;
 }
-.chat_box {
-  width: calc(100% - 25px);
+
+.chatBox_submitBtn {
+  color: $grey;
+  cursor: pointer;
+  transition: 1s;
+  right: 7%;
+  bottom: 10%;
+  position: absolute;
+}
+.chatBox_submitBtn:hover {
+  color: $blue;
 }

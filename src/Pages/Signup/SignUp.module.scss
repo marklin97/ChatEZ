@@ -8,7 +8,7 @@ body {
   background-size: cover;
 }
 
-.signup_form {
+.signupForm {
   position: absolute;
   top: 0;
   left: 0;
@@ -23,40 +23,33 @@ body {
   overflow: auto;
 }
 
-.logo {
-  float: left;
-  width: 150px;
-  height: 150px;
-  margin-left: 5%;
-}
-
-.login_link {
+.signupForm_link {
   width: 100%;
   text-decoration: "none";
   color: "#303f9f";
   user-select: none;
 }
 
-.checkIcon {
+.signupForm_checkIcon {
   vertical-align: middle;
   display: inline-flex;
   color: $green-1;
 }
-.emailIcon {
-  margin-right: 2%;
+.signupForm_emailIcon {
+  margin-right: 1%;
 }
-.loadingGif {
+.signupForm_loader {
   margin-top: 5%;
 }
-.warning {
+.signupForm_text__warning {
   color: $red;
   font-size: 0.9rem;
 }
-.notification_title {
+.signupForm_notification__primary {
   font-size: 1rem;
   color: $green-1;
 }
-.notification_text {
+.signupForm_notification__secondary {
   font-size: 0.9rem;
   color: $grey;
 }

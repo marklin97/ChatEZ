@@ -1,16 +1,14 @@
 import { combineReducers } from "redux";
 import LoginReducer from "./LoginModule/reducer";
 import SignUpReducer from "./SignUpModule/reducer";
-import UserReducer from "./UserModule/reducer";
-import FriendReducer from "./FriendModule/reducer";
-// import demoReducer from './moduleA/reducer';
-
+import ProfileReducer from "./ProfileModule/reducer";
+import RequestReducer from "./RequestModule/reducer";
 // combine all the reducer in here
 const rootReducer = combineReducers({
   loginReducer: LoginReducer,
   signUpReducer: SignUpReducer,
-  userReducer: UserReducer,
-  friendReducer: FriendReducer,
+  requestReducer: RequestReducer,
+  profileReducer: ProfileReducer,
 });
 // export the root reducer state
 export type RootState = ReturnType<typeof rootReducer>;

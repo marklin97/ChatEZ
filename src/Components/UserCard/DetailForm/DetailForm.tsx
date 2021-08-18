@@ -8,7 +8,7 @@ import Styles from "./DetailForm.module.scss";
 import EditIcon from "@material-ui/icons/Edit";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import firebase from "firebase";
-import * as actions from "../../../Store/UserModule/actions";
+import * as actions from "../../../Store/ProfileModule/actions";
 
 import {
   DialogContent,
@@ -32,15 +32,17 @@ import {
 
 interface DetailFormProps {
   imageFile: File;
-  userProfile: any;
+  userEmail: string;
 }
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
-const DetailForm: React.FC<DetailFormProps> = ({ imageFile }) => {
+const DetailForm: React.FC<DetailFormProps> = ({ imageFile, userEmail }) => {
   const dispatch = useDispatch();
   // This needs to be fixed
-  const userEmail = firebase.auth().currentUser.email;
   const profile = useSelector(
-    (state: RootState) => state.friendReducer.friends[userEmail]?.profile
+    (state: RootState) => state.profileReducer.users[userEmail]?.profile
+  );
+  const updateSuccess = useSelector(
+    (state: RootState) => state.profileReducer.updateSuccess
   );
 
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
@@ -77,33 +79,49 @@ const DetailForm: React.FC<DetailFormProps> = ({ imageFile }) => {
    * This is an function to handle change of gender field
    * */
   const handleGenderChange = (event: React.ChangeEvent<{ value: string }>) => {
+    console.log(event.target.value as string);
     setProfile({ ...localProfile, gender: event.target.value as string });
   };
-  /**
-   * This is an function to handle change of gender field
-   * */
-  const handleDateChange = (event: React.ChangeEvent<{ value: string }>) => {
-    console.log(event.target.value);
-    setProfile({
-      ...localProfile,
-      birthday: event.target.value,
-    });
-  };
+  // /**
+  //  * This is an function to handle change of gender field
+  //  * */
+  // const handleDateChange = (event: React.ChangeEvent<{ value: string }>) => {
+  //   setProfile({
+  //     ...localProfile,
+  //     birthday: event.target.value,
+  //   });
+  // };
   /**
    * This is an function to handle state of editable of form
    * */
   const handleIconClick = () => {
-    setDisableEdit(!disableEdit);
+    if (firebase.auth().currentUser.email === userEmail) {
+      setDisableEdit(!disableEdit);
+    }
   };
-  const handleAlertClose = () => {
+
+  const handleAlertClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch(actions.resetStateAction());
     setOpen(false);
   };
+
   /**
    * This is an function to handle save button click
    * */
   const handleSave = async () => {
-    dispatch(actions.updateProfileAction(imageFile, userEmail, localProfile));
-    // setOpen(true);
+    dispatch(
+      actions.updateProfileAction(
+        imageFile ? imageFile : null,
+        userEmail,
+        gender,
+        description ? description : "",
+        birthday
+      )
+    );
+    setOpen(true);
   };
   /**
    * This is an function to calculate the age of user by birthday
@@ -134,7 +152,7 @@ const DetailForm: React.FC<DetailFormProps> = ({ imageFile }) => {
             textAlign: "center",
           }}
         >
-          <FormControl disabled={disableEdit} style={{ marginLeft: "10%" }}>
+          <FormControl disabled={disableEdit}>
             <Input
               multiline
               rowsMax="3"
@@ -145,20 +163,25 @@ const DetailForm: React.FC<DetailFormProps> = ({ imageFile }) => {
 
             <FormHelperText>Describe yourself in one sentence</FormHelperText>
           </FormControl>
-          <IconButton onClick={handleIconClick}>
-            <EditIcon />
-          </IconButton>
+          {firebase.auth().currentUser.email === userEmail ? (
+            <IconButton
+              onClick={handleIconClick}
+              style={{ position: "relative" }}
+            >
+              <EditIcon />
+            </IconButton>
+          ) : null}
         </DialogContent>
         <Grid container spacing={0}>
           <Grid item xs={5}>
             <DialogContent
-              className={Styles.dialog_content}
+              className={Styles.form_dialog}
               style={{ paddingLeft: "50%" }}
             >
               {gender === "male" ? (
-                <i className={`fas fa-mars` + " " + Styles.marsIcon}></i>
+                <i className={`fas fa-mars ` + Styles.form_marsIcon}></i>
               ) : (
-                <i className={`fas fa-venus` + " " + Styles.venusIcon}></i>
+                <i className={`fas fa-venus ` + Styles.form_venusIcon}></i>
               )}
 
               <Select
@@ -167,56 +190,66 @@ const DetailForm: React.FC<DetailFormProps> = ({ imageFile }) => {
                 disabled={disableEdit}
               >
                 <MenuItem value={"male"}>
-                  <span className={Styles.optionText}>Male</span>
+                  <span className={Styles.form_text}>Male</span>
                 </MenuItem>
                 <MenuItem value={"female"}>
-                  <span className={Styles.optionText}>Female</span>
+                  <span className={Styles.form_text}>Female</span>
                 </MenuItem>
               </Select>
             </DialogContent>
           </Grid>
           <Grid item xs={7}>
-            <DialogContent className={Styles.dialog_content}>
-              <div style={{ height: "32%" }}>
+            <DialogContent className={Styles.form_dialog}>
+              <div style={{ height: "31%" }}>
                 <Typography
                   variant="h4"
                   style={{ color: "#3fbfbf" }}
                 >{`${calculateAge()}`}</Typography>
               </div>
               <TextField
-                id="date"
                 type="date"
                 defaultValue={birthday}
-                className={Styles.optionText}
-                onChange={handleDateChange}
+                className={Styles.form_text}
                 disabled={disableEdit}
+                InputProps={{
+                  inputProps: {
+                    min: "1970-01-01",
+                    max: "2003-01-01",
+                  },
+                }}
               />
-              <FormHelperText style={{ marginLeft: "12%" }}>
+              <FormHelperText style={{ marginLeft: "16%" }}>
                 Date Of Birth
               </FormHelperText>
             </DialogContent>
           </Grid>
         </Grid>
 
-        <DialogActions className={Styles.dialog_action}>
-          <Button className={Styles.save_button} onClick={handleSave}>
-            Save
-          </Button>
+        <DialogActions className={Styles.form_dialogAction}>
+          {firebase.auth().currentUser.email === userEmail ? (
+            <Button className={Styles.save_button} onClick={handleSave}>
+              Save
+            </Button>
+          ) : null}
         </DialogActions>
       </div>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        autoHideDuration={4000}
-        open={open}
-        onClose={handleAlertClose}
-      >
-        <Alert severity="success">
-          Updated Successfully, Page will be automatically reloaded
-        </Alert>
-      </Snackbar>
+      {updateSuccess !== null ? (
+        <Snackbar
+          autoHideDuration={1500}
+          open={open}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          onClose={handleAlertClose}
+        >
+          {updateSuccess ? (
+            <Alert severity="success">Success! Changes have been saved</Alert>
+          ) : (
+            <Alert severity="warning">Failed! Unable to save the changes</Alert>
+          )}
+        </Snackbar>
+      ) : null}
     </div>
   );
 };

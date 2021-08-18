@@ -1,17 +1,16 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
 import React, { useState, useEffect } from "react";
-import SearchBar from "../SearchBar/SearchBar";
+import FilterBar from "../FilterBar/FilterBar";
 import Styles from "./FriendList.module.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import UserMenu from "../UserMenu/UserMenu";
 import UserAvatar from "../UserAvatar/UserAvatar";
-import DefaultAvatar from "../../Assets/DefaultAvatar/download.jpg";
 import firebase from "firebase";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 import { RootState } from "../../Store/rootReducer";
-import * as actions from "../../Store/UserModule/actions";
-import * as actions1 from "../../Store/FriendModule/actions";
+
 import {
   List,
   ListItem,
@@ -20,7 +19,6 @@ import {
   Divider,
   IconButton,
 } from "@material-ui/core";
-import axios, { AxiosRequestConfig } from "axios";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /*********
 /*********
@@ -46,16 +44,16 @@ const FriendList: React.FC<FriendListProps> = ({
   userEmail,
   userProfile,
   chats,
-}) => {
+}): JSX.Element => {
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
-  const dispatch = useDispatch();
   /**
    * This is user's current avatar
    * */
 
   const avatar = useSelector(
-    (state: RootState) => state.friendReducer.friends[userEmail]?.profile.avatar
+    (state: RootState) => state.profileReducer.users[userEmail]?.profile.avatar
   );
+  const profile = useSelector((state: RootState) => state.profileReducer);
 
   /************* This section will include this component HOOK function *************/
   /**
@@ -76,8 +74,6 @@ const FriendList: React.FC<FriendListProps> = ({
    *  This hook retrieves user avatar & profile
    * */
   useEffect(() => {
-    dispatch(actions.getAvatarAction(userEmail));
-    dispatch(actions1.getProfileAction(userEmail));
     setFriendList(chats);
   }, [chats]);
   /* <------------------------------------ **** HOOKS END **** ------------------------------------ */
@@ -97,18 +93,21 @@ const FriendList: React.FC<FriendListProps> = ({
       "&$selected:hover": {
         backgroundColor: "rgb(80, 80, 80)",
       },
+      "MuiTypography-body1": {},
     },
     selected: {},
   });
   const classes = useStyles();
 
+  const userIsSender = (chat) => {
+    return chat.messages[chat.messages.length - 1].sender === userEmail;
+  };
   /**
    * This function is to handle search input
    * This function is invoked every time user types in search form
    */
   const handleUserTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     let searchResult = [];
-    console.log(chats);
     if (chats !== null && e.target.value !== "") {
       for (let i = 0; i < chats.length; i++) {
         if (
@@ -116,8 +115,10 @@ const FriendList: React.FC<FriendListProps> = ({
              or receiver, they all going to be displayed in the chat list of relevant user.
              Thus,we need to perform search in both side to search for the target chat.
           */
-          chats[i].users[0].includes(e.target.value) ||
-          chats[i].users[1].includes(e.target.value)
+          chats[i].users[0]
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) ||
+          chats[i].users[1].toLowerCase().includes(e.target.value.toLowerCase())
         ) {
           searchResult.push(chats[i]);
         }
@@ -137,8 +138,8 @@ const FriendList: React.FC<FriendListProps> = ({
   /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
 
   return (
-    <div className={Styles.container}>
-      <div className={Styles.chat_header}>
+    <div className={Styles.friendList}>
+      <div className={Styles.friendList_username}>
         <IconButton onClick={handleClick}>
           <UserAvatar imgSrc={avatar} variant={"rounded"} />
         </IconButton>
@@ -151,12 +152,12 @@ const FriendList: React.FC<FriendListProps> = ({
         />
 
         {userProfile.displayName === " " || null ? (
-          <span className={Styles.user_name}>{userEmail}</span>
+          <span>{userEmail}</span>
         ) : (
-          <span className={Styles.user_name}>{userProfile.displayName}</span>
+          <span>{userProfile.displayName}</span>
         )}
       </div>
-      <SearchBar onChange={handleUserTyping} />
+      <FilterBar onChange={handleUserTyping} />
 
       <List>
         {friendList
@@ -168,7 +169,7 @@ const FriendList: React.FC<FriendListProps> = ({
               return (
                 <div key={index}>
                   <ListItem
-                    className={Styles.list_item}
+                    className={Styles.friendList_item}
                     onClick={() => selectChatFn(index)}
                     alignItems="flex-start"
                     selected={selectedChat === index}
@@ -177,21 +178,48 @@ const FriendList: React.FC<FriendListProps> = ({
                     <ListItemAvatar>
                       <UserAvatar userEmail={friendEmail} variant={"rounded"} />
                     </ListItemAvatar>
+
                     <ListItemText
                       primary={
-                        // user email or username
-                        chat.users.filter((user) => user !== userEmail)[0]
+                        // friend
+                        <span
+                          style={{
+                            maxWidth: "10px",
+                            display: "block",
+                            textOverflow: "hidden",
+                            whiteSpace: "nowrap",
+                            marginTop: "3px",
+                          }}
+                        >
+                          {profile.users[
+                            chat.users.filter((user) => user !== userEmail)[0]
+                          ]
+                            ? profile.users[
+                                chat.users.filter(
+                                  (user) => user !== userEmail
+                                )[0]
+                              ].profile.displayName
+                            : null}
+                        </span>
                       }
                       secondary={
                         // latest message from sender
-                        <span className={Styles.message}>
-                          {chat.messages[
-                            chat.messages.length - 1
-                          ].message.substring(0, 30) + " ..."}
+                        <span className={Styles.friendList_message}>
+                          {chat.messages[chat.messages.length - 1].message
+                            .length > 25
+                            ? chat.messages[
+                                chat.messages.length - 1
+                              ].message.substring(0, 25) + " ..."
+                            : chat.messages[chat.messages.length - 1].message}
                         </span>
                       }
                     ></ListItemText>
+
+                    {chat.receiverHasRead === false && !userIsSender(chat) ? (
+                      <NotificationsIcon fontSize="small" />
+                    ) : null}
                   </ListItem>
+
                   <Divider />
                 </div>
               );

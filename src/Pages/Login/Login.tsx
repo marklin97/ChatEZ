@@ -1,16 +1,17 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Styles from "./Login.module.scss";
 import { Link } from "../../../node_modules/react-router-dom";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-// import Logo from "../../Assets/Images/Logo.png";
 import Footer from "../../Components/Footer/Footer";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Store/rootReducer";
 import * as actions from "../../Store/LoginModule/actions";
+
 import {
   FormControl,
   InputLabel,
@@ -27,6 +28,7 @@ import {
 /*********/
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
 const Login = (): JSX.Element => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   /**
    * This is user's current login status
@@ -64,7 +66,6 @@ const Login = (): JSX.Element => {
       signInSuccessWithAuthResult: (authRes: any) => {
         // User successfully signed in.
         // Create and store user account into database
-
         const { id, name } = authRes.additionalUserInfo.profile;
         const userObject = {
           /* If the third party platform return id instead of email, a unique email 
@@ -95,7 +96,7 @@ const Login = (): JSX.Element => {
     // Terms of service url.
     tosUrl: "<your-tos-url>",
     // Privacy policy url.
-    privacyPolicyUrl: "<your-privacy-policy-url>",
+    privacyPolicyUrl: "<your-tos-url>",
   };
 
   /**
@@ -119,7 +120,8 @@ const Login = (): JSX.Element => {
    * */
   const userLogin = async (e) => {
     e.preventDefault();
-    const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const mailFormat =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!userInputs.email.match(mailFormat)) {
       setUserInputs({
         ...userInputs,
@@ -134,9 +136,7 @@ const Login = (): JSX.Element => {
 
   return (
     <div>
-      {/* <img src={Logo} className={Styles.logo} alt="Logo" /> */}
-      <Footer />
-      <Paper elevation={3} className={Styles.login_form}>
+      <Paper elevation={3} className={Styles.loginForm}>
         <form
           onSubmit={(e) => {
             // userLogin(e);
@@ -144,14 +144,16 @@ const Login = (): JSX.Element => {
           }}
         >
           {userInputs.inputError ? (
-            <span className={Styles.warning}>{userInputs.inputError}</span>
+            <span className={Styles.loginForm_text__warning}>
+              {userInputs.inputError}
+            </span>
           ) : (
-            <span className={Styles.warning}>{loginError}</span>
+            <span className={Styles.loginForm_text__warning}>{loginError}</span>
           )}
 
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="login-email-input">
-              Email Address
+              {t("loginForm.emailLabel")}
             </InputLabel>
             <Input
               autoComplete="email"
@@ -162,7 +164,7 @@ const Login = (): JSX.Element => {
           </FormControl>
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="login-password-input">
-              Password
+              {t("loginForm.passwordLabel")}
             </InputLabel>
             <Input
               autoComplete="current-password"
@@ -176,10 +178,12 @@ const Login = (): JSX.Element => {
             color="primary"
             variant="contained"
             fullWidth={true}
-            className={Styles.login_button}
+            className={Styles.loginForm_btn}
           >
-            <AlternateEmailIcon className={Styles.emailIcon} />
-            <span className={Styles.login_button_text}>Login</span>
+            <AlternateEmailIcon className={Styles.loginForm_emailIcon} />
+            <span className={Styles.loginForm_buttonText}>
+              {t("loginForm.loginLabel")}
+            </span>
           </Button>
         </form>
 
@@ -187,16 +191,22 @@ const Login = (): JSX.Element => {
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />
-        {!loginError && loading ? (
-          <CircularProgress color="secondary" className={Styles.loadingGif} />
-        ) : null}
-        <Typography variant="subtitle2">Don't Have An Account?</Typography>
-        <Link className={Styles.signup_link} to="/signup">
+        <div className={Styles.loginForm_loader}>
+          {!loginError && loading ? (
+            <CircularProgress color="secondary" />
+          ) : null}
+        </div>
+        <Typography variant="subtitle2">
+          {" "}
+          {t("loginForm.suggestion")}
+        </Typography>
+        <Link className={Styles.loginForm_link} to="/signup">
           <Typography color="textPrimary" variant="overline" display="inline">
-            SIGN UP
+            {t("loginForm.signUpLink")}
           </Typography>
         </Link>
       </Paper>
+      <Footer />
     </div>
   );
 };

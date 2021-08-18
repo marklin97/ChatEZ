@@ -1,13 +1,11 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
 import React, { useState, useEffect } from "react";
-import axios, { AxiosRequestConfig } from "axios";
-import firebase from "firebase";
+
 import { Avatar } from "@material-ui/core/";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../Store/rootReducer";
-import DefaultAvatar from "../../Assets/DefaultAvatar/download-1.jpg";
-import * as actions from "../../Store/FriendModule/actions";
+import DefaultAvatar from "../../Assets/Avatar/default.jpg";
 
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /*********
@@ -34,19 +32,15 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
   variant,
 }) => {
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
-  const dispatch = useDispatch();
   /**
    * This is user's current login status
    * */
   const userAvatar = useSelector(
     // (state: RootState) => state.userReducer.avatar
-    (state: RootState) => state.friendReducer.friends[userEmail]?.profile.avatar
+    (state: RootState) => state.profileReducer.users[userEmail]?.profile.avatar
   );
   /************* This section will include this component HOOK function *************/
-  /**
-   *  This hook holds the downloaded avatar from storage
-   * */
-  const [avatar, setAvatar] = useState(null);
+
   /**
    *  This hook sets the image style according to the variant
    * */
@@ -56,9 +50,8 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
    *  This hook invokes every-time user email gets changed
    * */
   useEffect(() => {
-    dispatch(actions.getAvatarAction(userEmail));
     getStyle(size);
-  }, [userEmail]);
+  }, [userEmail, size]);
   /* <------------------------------------ **** HOOKS END **** ------------------------------------ */
 
   /* <------------------------------------ **** FUNCTION START **** ------------------------------------ */
@@ -67,39 +60,11 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
    * This is an function customized the style for material ui component
    * */
   const getStyle = (size) => {
-    if (size == "large") {
+    if (size === "large") {
       setImgStyle({ width: "110px", height: "110px" });
     }
   };
-  /**
-   * This function is to get user's avatar from firebase storage
-   */
-  const getUserAvatar = async (email: String) => {
-    if (!imgSrc) {
-      // Create a root reference
-      const storageRef = firebase.storage().ref();
-      // Create a reference to user avatar file
-      const ref = storageRef.child(`Avatars/${email}`);
-      await ref
-        .getDownloadURL()
-        .then((url) => {
-          const config: AxiosRequestConfig = {
-            responseType: "blob",
-          };
-          axios
-            .get(url, config)
-            .then((response) => {
-              setAvatar(URL.createObjectURL(response.data));
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
+
   /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
 
   if (imgSrc) {

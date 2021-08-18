@@ -4,7 +4,7 @@ import React, { Dispatch, useState } from "react";
 import { Menu, MenuItem } from "@material-ui/core";
 import firebase from "firebase";
 import Styles from "./UserMenu.module.scss";
-import UserProfile from "../UserProfile/UserProfile";
+import UserCard from "../UserCard/UserCard";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
@@ -30,7 +30,6 @@ const UserMenu: React.FC<UserMenuProps> = ({
   setAnchorEl,
   userEmail,
   imgSrc,
-  userProfile,
 }) => {
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
   /************* This section will include this component HOOK function *************/
@@ -88,23 +87,22 @@ const UserMenu: React.FC<UserMenuProps> = ({
         getContentAnchorEl={null}
       >
         <MenuItem onClick={handleProfile}>
-          <AccountCircleIcon className={Styles.AccountIcon} />
+          <AccountCircleIcon className={Styles.userMenu_AccountIcon} />
 
-          <span className={Styles.menu_item}>Profile</span>
+          <span className={Styles.userMenu_item}>Profile</span>
         </MenuItem>
 
         <MenuItem onClick={handleSignOut}>
-          <PowerSettingsNewIcon className={Styles.SignOutIcon} />
+          <PowerSettingsNewIcon className={Styles.userMenu_SignOutIcon} />
 
-          <span className={Styles.menuItem}>Offline</span>
+          <span className={Styles.userMenu_item}>Offline</span>
         </MenuItem>
       </Menu>
-      <UserProfile
+      <UserCard
         open={open}
         handleClose={handleFormClose}
         userEmail={userEmail}
         imgSrc={imgSrc}
-        userProfile={userProfile}
       />
     </div>
   );

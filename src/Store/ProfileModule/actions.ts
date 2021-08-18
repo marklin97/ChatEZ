@@ -1,4 +1,9 @@
 import * as types from "./types";
+const resetStateAction = (): types.UpdateProfileActionTypes => {
+  return {
+    type: types.RESET,
+  };
+};
 /**
  * Get User Avatar Action
  */
@@ -53,7 +58,6 @@ const getProfileAction = (email: string): types.GetProfileActionTypes => {
  */
 const getProfileSuccessAction = (
   email: string,
-
   displayName: string,
   birthday: string,
   gender: string,
@@ -83,21 +87,73 @@ const getProfileFailAction = (
     },
   };
 };
-const getFriendsAction = (email: string): types.FriendProfileActionTypes => {
+const getUsersAction = (email: string): types.UserProfileActionTypes => {
   return {
-    type: types.GETFRIENDS,
+    type: types.GETUSERS,
     payload: {
       email: email,
     },
   };
 };
 
+const updateProfileAction = (
+  imgFile?: File,
+  email?: string,
+  gender?: string,
+  description?: string,
+  birthday?: string
+): types.UpdateProfileActionTypes => {
+  return {
+    type: types.UPDATEPROFILE,
+    payload: {
+      imgFile: imgFile,
+      email: email,
+      gender: gender,
+      description: description,
+      birthday: birthday,
+    },
+  };
+};
+
+const updateProfileSuccessAction = (
+  email: string,
+  avatar?: string,
+  gender?: string,
+  description?: string,
+  birthday?: string
+): types.UpdateProfileActionTypes => {
+  return {
+    type: types.UPDATEPROFILE_SUCCEED,
+    payload: {
+      email: email,
+      avatar: avatar,
+      gender: gender,
+      description: description,
+      birthday: birthday,
+    },
+  };
+};
+
+const updateProfileFailAction = (
+  errorMsg: string
+): types.UpdateProfileActionTypes => {
+  return {
+    type: types.UPDATEPROFILE_FAIL,
+    payload: {
+      errorMsg: errorMsg,
+    },
+  };
+};
 export {
+  resetStateAction,
   getAvatarAction,
   getAvatarSuccessAction,
   getAvatarFailAction,
   getProfileAction,
   getProfileSuccessAction,
   getProfileFailAction,
-  getFriendsAction,
+  getUsersAction,
+  updateProfileAction,
+  updateProfileSuccessAction,
+  updateProfileFailAction,
 };

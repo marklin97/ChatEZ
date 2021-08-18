@@ -5,11 +5,11 @@ import FriendList from "../../Components/FriendList/FriendList";
 import ChatView from "../../Components/ChatView/ChatView";
 import firebase from "firebase";
 import Styles from "./Dashboard.module.scss";
-import { timeStamp } from "console";
 import Grid from "@material-ui/core/Grid";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Store/rootReducer";
-import * as actions from "../../Store/FriendModule/actions";
+import * as actions from "../../Store/ProfileModule/actions";
+// import { timeStamp } from "console";
 
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /*********
@@ -23,12 +23,12 @@ interface chatState {
   email: string | null;
   chats: firebase.firestore.DocumentData[] | null;
 }
-interface userProfile {
-  displayName: string;
-  description: string;
-  birthday: string;
-  gender: string;
-}
+const initState = {
+  displayName: "",
+  gender: "",
+  description: "",
+  birthday: "",
+};
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /*********
 /*********
@@ -36,15 +36,10 @@ interface userProfile {
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
 const Dashboard = (): JSX.Element => {
   const dispatch = useDispatch();
-  /**
-   * This is current state of user profile
-   */
-  const user_profile = useSelector(
-    (state: RootState) => state.userReducer.profile
-  );
 
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
   /************* This section will include this component HOOK function *************/
+
   /**
    *  This hook holds the current selected index of user's chat list
    * */
@@ -60,14 +55,11 @@ const Dashboard = (): JSX.Element => {
   // Destructure of chatState
   const { selectedChat, email, chats } = chatState;
   /**
-   *  This state will be handled by the redux in the future
-   * */
-  const [userProfile, setUserProfile] = useState<userProfile>({
-    displayName: "",
-    birthday: "",
-    gender: "",
-    description: "",
-  });
+   * This is current state of user profile
+   */
+  const userProfile = useSelector(
+    (state: RootState) => state.profileReducer.users[email]?.profile
+  );
 
   /**
    * This is a hook to retrieve user's profile & friend list when authorized user visits the page
@@ -84,9 +76,7 @@ const Dashboard = (): JSX.Element => {
           email = user.providerData[0].uid + "@" + "facebook.com";
         }
         // retrieve user profile data
-        // dispatch(actions1.;
-        dispatch(actions.getFriendsAction(email));
-        // dispatch(actions.getProfileAction(email));
+        dispatch(actions.getUsersAction(email));
         // retrieve history ages
         getHistoryMsg(email);
       }
@@ -103,30 +93,12 @@ const Dashboard = (): JSX.Element => {
   /**
    * This is a function to handle user's selection of friend list
    * */
-  const selectChat = (index) => {
+  const selectChat = async (index) => {
     chatIndex.current = index;
     setChatState({ ...chatState, selectedChat: index });
+    readMsg();
   };
-  /**
-   * This is a function to handle user's operation for sending message to other
-   * This function will be handle by the saga in the future
-   * */
-  // const getUserProfile = async (email: string) => {
-  //   await firebase
-  //     .firestore()
-  //     .collection("users")
-  //     .where("email", "==", email)
-  //     .onSnapshot(async (res) => {
-  //       let profile = res.docs.map((doc) => doc.data());
-  //       setUserProfile({
-  //         ...userProfile,
-  //         displayName: profile[0].displayName,
-  //         gender: profile[0].gender,
-  //         birthday: profile[0].birthday,
-  //         description: profile[0].description,
-  //       });
-  //     });
-  // };
+
   /**
    * This is a function to retrieve user's involved conversation and past message
    * This function will be handle by the saga in the future
@@ -169,29 +141,51 @@ const Dashboard = (): JSX.Element => {
         receiverHasRead: false,
       });
   };
+  const buildDocKey = (friend) => [email, friend].sort().join(":");
+
   /**
    * This is a function to handle send message operation
    * */
   const submitMessageFn = async (msg) => {
     // create a string in the form of user1 : user 2
-    const buildDocKey = (friend) => [email, friend].sort().join(":");
     const docKey = buildDocKey(
       chats[selectedChat].users.filter((_usr) => _usr !== email)[0]
     );
     updateConversation(docKey, email, msg);
   };
+  const readMsg = async () => {
+    const docKey = buildDocKey(
+      chats[selectedChat].users.filter((_usr) => _usr !== email)[0]
+    );
+    if (receiverHasReadMsg()) {
+      await firebase
+        .firestore()
+        .collection("chats")
+        .doc(docKey)
+        .update({ receiverHasRead: true });
+    } else {
+      console.log("Clicked message where the user was the sender");
+    }
+  };
+
+  const receiverHasReadMsg = () => {
+    return (
+      chats[selectedChat].messages[chats[selectedChat].messages.length - 1]
+        .sender !== email
+    );
+  };
 
   /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
 
   return (
-    <div className={Styles.container}>
-      <Grid container direction="row" justify="center">
+    <div className={Styles.Dashboard_container}>
+      <Grid container direction="row" alignItems="center" justify="center">
         <Grid item xs={3}>
           <FriendList
             selectChatFn={selectChat}
             userEmail={email}
             chats={chats}
-            userProfile={user_profile}
+            userProfile={userProfile ? userProfile : initState}
             selectedChat={selectedChat}
           />
         </Grid>

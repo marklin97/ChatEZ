@@ -1,14 +1,26 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
-import React from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import AddIcon from "@material-ui/icons/Add";
+import React, { useState } from "react";
 import Styles from "./SearchForm.module.scss";
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "../../Store/RequestModule/actions";
+import { RootState } from "../../Store/rootReducer";
+import AddIcon from "@material-ui/icons/Add";
+import SearchIcon from "@material-ui/icons/Search";
+import ConfirmBox from "../SearchForm/ConfirmBox/ConfirmBox";
+import UserItem from "./UserItem/UserItem";
+import NotFoundImg from "../../Assets/Images/NotFound.png";
+import firebase from "firebase";
+
+import {
+  Button,
+  IconButton,
+  TextField,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@material-ui/core";
+
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /*********
 /*********
@@ -18,10 +30,15 @@ import Styles from "./SearchForm.module.scss";
 const SearchForm = (): JSX.Element => {
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
   /************* This section will include this component HOOK function *************/
+  const [input, setInput] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
+  const result = useSelector((state: RootState) => state.requestReducer.users);
   /**
    *  This hook holds the state of display of the search form
    * */
   const [open, setOpen] = React.useState(false);
+  const [openPrompt, setOpenPrompt] = React.useState(false);
+  const dispatch = useDispatch();
   /* <------------------------------------ **** HOOKS END **** ------------------------------------ */
   /*
   /** */
@@ -38,12 +55,33 @@ const SearchForm = (): JSX.Element => {
    *  This is a function to handle close operation of search form
    * */
   const handleClose = () => {
+    dispatch(actions.resetAction());
     setOpen(false);
+  };
+
+  const handleOpenPrompt = (email: string) => {
+    setSelectedUser(email);
+    setOpenPrompt(true);
+  };
+  const handleClosePrompt = () => {
+    setOpenPrompt(false);
+  };
+  const handleSearch = () => {
+    if (input.length > 0) {
+      dispatch(actions.resetAction());
+      dispatch(actions.getUserAction(input));
+    }
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && input.length > 0) {
+      dispatch(actions.resetAction());
+      dispatch(actions.getUserAction(input));
+    }
   };
   return (
     <div>
       <Button>
-        <AddIcon className={Styles.addIcon} onClick={handleOpen} />
+        <AddIcon className={Styles.searchForm_addIcon} onClick={handleOpen} />
       </Button>
 
       <Dialog
@@ -54,29 +92,59 @@ const SearchForm = (): JSX.Element => {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          <span style={{ fontSize: "1rem" }}>Add New Friend</span>
+          <span className={Styles.searchForm_header}>Add New Friend</span>
         </DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText> */}
           <TextField
             required
             autoFocus
             margin="dense"
-            id="name"
-            label="Email Address / Username"
+            label="Search by Email Address / Email Prefix"
             type="email"
-            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            className={Styles.searchForm_inputField}
           />
+          <IconButton
+            onClick={handleSearch}
+            className={Styles.searchForm_searchIcon}
+          >
+            <SearchIcon />
+          </IconButton>
         </DialogContent>
-        <div></div>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Search
-          </Button>
-        </DialogActions>
+        <div className={Styles.searchForm_container}>
+          {result.length > 0 ? (
+            result.map((user, index) => {
+              if (user.email !== firebase.auth().currentUser.email) {
+                return (
+                  <div key={index}>
+                    <UserItem
+                      email={user.email}
+                      displayName={user.displayName}
+                      handleOpen={() => handleOpenPrompt(user.email)}
+                    />
+                  </div>
+                );
+              } else {
+                return null;
+              }
+            })
+          ) : (
+            <img
+              className={Styles.searchForm_img}
+              src={NotFoundImg}
+              alt="Not Found"
+            />
+          )}
+        </div>
+        <ConfirmBox
+          email={selectedUser}
+          open={openPrompt}
+          handleClose={handleClosePrompt}
+        />
       </Dialog>
     </div>
   );

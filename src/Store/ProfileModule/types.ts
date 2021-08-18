@@ -3,8 +3,10 @@
  */
 const GETAVATAR = "GETAVATAR";
 const GETPROFILE = "GETPROFILE";
-const GETMESSAGE = "GETMESSAGE";
+const GETUSERS = "GETUSERS";
 const UPDATEPROFILE = "UPDATEPROFILE";
+const RESET = "RESET";
+
 /**
  * Action types listen by Reducer
  */
@@ -14,28 +16,35 @@ const GETAVATAR_FAILED = "GETAVATAR_FAILED";
 const GETPROFILE_SUCCEED = "GETPROFILE_SUCCEED";
 const GETPROFILE_FAILED = "GETPROFILE_FAILED";
 
-const GETMESSAGE_SUCCEED = "GETMESSAGE_SUCCEED";
-const GETMESSAGE_FAILED = "GETMESSAGE_FAILED";
-
 const UPDATEPROFILE_SUCCEED = "UPDATEPROFILE_SUCCEED";
 const UPDATEPROFILE_FAIL = "UPDATEPROFILE_FAIL";
+
 export {
+  RESET,
   GETAVATAR,
   GETPROFILE,
-  GETMESSAGE,
+  GETUSERS,
   UPDATEPROFILE,
   GETAVATAR_SUCCEED,
   GETAVATAR_FAILED,
   GETPROFILE_SUCCEED,
   GETPROFILE_FAILED,
-  GETMESSAGE_SUCCEED,
-  GETMESSAGE_FAILED,
   UPDATEPROFILE_SUCCEED,
   UPDATEPROFILE_FAIL,
 };
+interface ResetAction {
+  type: typeof RESET;
+}
+interface GetUsersAction {
+  type: typeof GETUSERS;
+  payload: {
+    email: string;
+  };
+}
 /**
- * This action will dispatch an Get Avatar action with the payload to saga
+ * This action will dispatch an GET AVATAR action with the payload to saga
  */
+
 interface GetAvatarAction {
   type: typeof GETAVATAR;
   payload: {
@@ -49,6 +58,7 @@ interface GetAvatarAction {
 interface GetAvatarSuccessAction {
   type: typeof GETAVATAR_SUCCEED;
   payload: {
+    email: string;
     avatar: string;
   };
 }
@@ -75,6 +85,7 @@ interface GetProfileAction {
 interface GetProfileSuccessAction {
   type: typeof GETPROFILE_SUCCEED;
   payload: {
+    email: string;
     displayName: string;
     gender: string;
     description: string;
@@ -87,57 +98,30 @@ interface GetProfileFailAction {
     errorMsg: string;
   };
 }
+
 export type GetProfileActionTypes =
   | GetProfileAction
   | GetProfileSuccessAction
   | GetProfileFailAction;
 
-interface GetMessageAction {
-  type: typeof GETMESSAGE;
-  payload: {
-    email: string;
-  };
-}
-interface GetMessageSuccessAction {
-  type: typeof GETMESSAGE_SUCCEED;
-  payload: {
-    messages: object;
-  };
-}
-interface GetMessageFailAction {
-  type: typeof GETMESSAGE_FAILED;
-  payload: {
-    errorMsg: string;
-  };
-}
-export type GetMessageActionTypes =
-  | GetMessageAction
-  | GetMessageSuccessAction
-  | GetMessageFailAction;
-
 interface UpdateProfileAction {
   type: typeof UPDATEPROFILE;
   payload: {
-    imgFile?: File;
     email?: string;
-    profile?: {
-      // displayName: string;
-      gender?: string;
-      description?: string;
-      birthday?: string;
-    };
+    imgFile?: File;
+    gender?: string;
+    description?: string;
+    birthday?: string;
   };
 }
 interface UpdateProfileSuccessAction {
   type: typeof UPDATEPROFILE_SUCCEED;
   payload: {
-    avatar: string;
-    profile: {
-      // displayName: string;
-      gender: string;
-      description: string;
-      birthday: string;
-    };
+    email?: string;
+    avatar?: string;
+    gender?: string;
+    description?: string;
+    birthday?: string;
   };
 }
 interface UpdateProfileFailAction {
@@ -149,24 +133,28 @@ interface UpdateProfileFailAction {
 export type UpdateProfileActionTypes =
   | UpdateProfileAction
   | UpdateProfileSuccessAction
-  | UpdateProfileFailAction;
+  | UpdateProfileFailAction
+  | ResetAction;
 
 export type UserProfileActionTypes =
-  | GetMessageActionTypes
   | GetProfileActionTypes
   | GetAvatarActionTypes
-  | UpdateProfileActionTypes;
+  | UpdateProfileActionTypes
+  | GetUsersAction;
 
-export interface UserReducer {
-  email: string;
-  avatar: string;
-  imgFile: any;
-  messages: object;
+export interface ProfileReducer {
   errorMsg: string;
-  profile: {
-    displayName: string;
-    gender: string;
-    description: string;
-    birthday: string;
+  imgFile: any;
+  updateSuccess: boolean | null;
+  users: {
+    [user: string]: {
+      profile: {
+        avatar?: string;
+        displayName?: string;
+        gender?: string;
+        description?: string;
+        birthday?: string;
+      };
+    };
   };
 }

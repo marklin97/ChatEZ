@@ -3,13 +3,15 @@
 import React, { useState } from "react";
 import Styles from "./SignUp.module.scss";
 import { Link } from "react-router-dom";
-// import Logo from "../../Assets/Images/Logo.png";
 import Footer from "../../Components/Footer/Footer";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Store/rootReducer";
+import * as actions from "../../Store/SignUpModule/actions";
+import { useTranslation } from "react-i18next";
+
 import {
   FormControl,
   InputLabel,
@@ -21,7 +23,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@material-ui/core";
-import * as actions from "../../Store/SignUpModule/actions";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /*********
 /*********
@@ -29,6 +30,8 @@ import * as actions from "../../Store/SignUpModule/actions";
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
 const SignUp = (): JSX.Element => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   /**
    * This is user's current login status
    * */
@@ -72,9 +75,11 @@ const SignUp = (): JSX.Element => {
    * */
   const formValidation = () => {
     // check if user has entered a valid email
-    const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const mailFormat =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     // check if user has entered a displayed name
-    const nameFormat = /^[A-Z0-9]{6,18}$/gim;
+    // Matches any character from a-z or 0-9 but the length range must between 6 to 18.
+    const nameFormat = /^[A-Z0-9_]{6,18}$/gim;
 
     if (!userInputs.email.match(mailFormat)) {
       setUserInputs({
@@ -159,13 +164,12 @@ const SignUp = (): JSX.Element => {
 
   return (
     <div>
-      {/* <img src={Logo} className={Styles.logo} alt="Logo" /> */}
-
-      <Paper variant="outlined" className={Styles.signup_form}>
+      <div></div>
+      <Paper variant="outlined" className={Styles.signupForm}>
         {inputError ? (
-          <span className={Styles.warning}>{inputError}</span>
+          <span className={Styles.signupForm_text__warning}>{inputError}</span>
         ) : (
-          <span className={Styles.warning}>{signUpError}</span>
+          <span className={Styles.signupForm_text__warning}>{signUpError}</span>
         )}
 
         <form
@@ -175,7 +179,8 @@ const SignUp = (): JSX.Element => {
         >
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="signup-email-input">
-              Enter Your Email
+              {/* Enter Your Email */}
+              {t("signUpForm.emailLabel")}
             </InputLabel>
             <Input
               autoComplete="email"
@@ -186,7 +191,7 @@ const SignUp = (): JSX.Element => {
           </FormControl>
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="signup-displayName-input">
-              Enter A Display Name
+              {t("signUpForm.nameLabel")}
             </InputLabel>
             <Input
               autoComplete="name"
@@ -198,7 +203,7 @@ const SignUp = (): JSX.Element => {
 
           <FormControl required fullWidth margin="normal">
             <InputLabel shrink={true} htmlFor="signup-password-input">
-              Create A Password
+              {t("signUpForm.passwordLabel")}
             </InputLabel>
             <Input
               type="password"
@@ -211,7 +216,7 @@ const SignUp = (): JSX.Element => {
               shrink={true}
               htmlFor="signup-password-confirmation-input"
             >
-              Confirm Your Password
+              {t("signUpForm.confirmLabel")}
             </InputLabel>
             <Input
               type="password"
@@ -226,22 +231,22 @@ const SignUp = (): JSX.Element => {
             variant="contained"
             style={{ marginTop: "20px" }}
           >
-            <AlternateEmailIcon className={Styles.emailIcon} />
-            Sign Up
+            <AlternateEmailIcon className={Styles.signupForm_emailIcon} />
+            {t("signUpForm.signUpLabel")}
           </Button>
           <Dialog open={signUpState} maxWidth={"xs"}>
             <DialogTitle>
               <CheckCircleOutlineIcon
                 fontSize={"default"}
-                className={Styles.checkIcon}
+                className={Styles.signupForm_checkIcon}
               />
-              <span className={Styles.notification_title}>
+              <span className={Styles.signupForm_notification__primary}>
                 Your account has been successfully created !
               </span>
             </DialogTitle>
 
             <DialogContent>
-              <span className={Styles.notification_text}>
+              <span className={Styles.signupForm_notification__secondary}>
                 Please check your inbox, an activation link has been sent to
                 your registered email, which needs to be activated before you
                 progress further.
@@ -254,15 +259,18 @@ const SignUp = (): JSX.Element => {
           </Dialog>
         </form>
         {!signUpError && loading ? (
-          <CircularProgress color="secondary" className={Styles.loadingGif} />
+          <CircularProgress
+            color="secondary"
+            className={Styles.signupForm_loader}
+          />
         ) : null}
         <Typography variant="subtitle2" style={{ paddingTop: "20px" }}>
-          Already Have An Account?
+          {t("signUpForm.suggestion")}
         </Typography>
 
-        <Link className={Styles.login_link} to="/login">
+        <Link className={Styles.signupForm_link} to="/login">
           <Typography color="textPrimary" variant="overline" display="inline">
-            Login
+            {t("signUpForm.loginLink")}
           </Typography>
         </Link>
       </Paper>

@@ -1,15 +1,7 @@
 @import "../../Constant/colors.module.scss";
-.container {
-  width: 20%;
+.Dashboard_container {
+  width: 100%;
   border: $black;
   border-width: 2px;
-}
-.signout_btn {
-  position: absolute;
-  bottom: "0px";
-  width: 20%;
-  background-color: #227092;
-  height: 3rem;
-  box-shadow: 0px 0px 2px $black;
-  color: $white;
+  margin-left: 10%;
 }

@@ -8,6 +8,7 @@ import firebase from "firebase/app";
 import { Grid } from "@material-ui/core";
 import { Provider } from "react-redux";
 import store from "./Store/rootStore";
+import "./Assets/Translation/i18n";
 
 require("firebase/firestore");
 
@@ -69,7 +70,7 @@ const routing: JSX.Element = (
         <Switch>
           <Route exact path="/login" component={Login}></Route>
           <Route exact path="/signup" component={SignUp}></Route>
-          <Route exact path="/dashboard" component={Dashboard}></Route>
+          <Route component={Dashboard}></Route>
         </Switch>
       </Router>
     </Suspense>

@@ -32,14 +32,14 @@ function* initUserProfile(email: string, displayName: string) {
 }
 function* initWelcomeMsg(email: string) {
   try {
-    const buildDocKey = [email, "admin@portexe.com"].join(":");
+    const buildDocKey = ["admin@portexe.com", email].sort().join(":");
     firebase
       .firestore()
       .collection("chats")
       .doc(buildDocKey)
       .set({
         messages: firebase.firestore.FieldValue.arrayUnion({
-          sender: "Admin@portexe.com",
+          sender: "admin@portexe.com",
           message: "It is our great pleasure to have you on board! ",
           timeStamp: Date.now(),
         }),

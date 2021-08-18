@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import CancelIcon from "@material-ui/icons/Cancel";
-import Styles from "./UserProfile.module.scss";
+import Styles from "./UserCard.module.scss";
 import backgroundImage from "../../Assets/Images/UserProfile_Background.jpg";
 import DetailForm from "./DetailForm/DetailForm";
 import UserAvatar from "../UserAvatar/UserAvatar";
@@ -22,7 +22,6 @@ interface UserProfileProps {
   userEmail: string;
   imgSrc?: string;
   variant?: "circle" | "rounded" | "square";
-  userProfile: any;
 }
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /*********
@@ -33,7 +32,6 @@ interface UserProfileProps {
 const UserProfile: React.FC<UserProfileProps> = ({
   open,
   handleClose,
-  userProfile,
   userEmail,
   imgSrc,
 }) => {
@@ -92,15 +90,12 @@ const UserProfile: React.FC<UserProfileProps> = ({
         aria-labelledby="form-dialog-title"
         classes={{ paper: classes.dialog }}
       >
-        <IconButton
-          style={{ width: "1rem", height: "1rem" }}
-          onClick={handleClose}
-        >
-          <CancelIcon fontSize={"small"} className={Styles.closeIcon} />
+        <IconButton className={Styles.userCard_closeIcon} onClick={handleClose}>
+          <CancelIcon fontSize={"small"} />
         </IconButton>
 
         <DialogContent style={{ textAlign: "center" }}>
-          <IconButton className={Styles.avatar}>
+          <IconButton className={Styles.userCard_avatar}>
             <input
               accept="image/*"
               style={{ display: "none" }}
@@ -117,7 +112,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                 variant={"circle"}
               />
               <PhotoCameraIcon
-                className={Styles.cameraIcon}
+                className={Styles.userCard_cameraIcon}
                 fontSize="large"
                 color="secondary"
               />
@@ -125,7 +120,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           </IconButton>
         </DialogContent>
 
-        <DetailForm imageFile={file} userProfile={userProfile} />
+        <DetailForm imageFile={file} userEmail={userEmail} />
       </Dialog>
     </div>
   );

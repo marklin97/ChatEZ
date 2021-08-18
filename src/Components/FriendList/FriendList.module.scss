@@ -1,50 +1,36 @@
 @import "../../Constant/colors.module.scss";
-.container {
+.friendList {
   background-color: rgb(44, 44, 44);
-  height: 85%;
   width: 20%;
-
-  min-width: 200px;
-  margin-left: 15%;
+  min-width: 150px;
+  height: 85%;
   margin-top: 2%;
   position: absolute;
   border-radius: 0.3rem 0rem 0rem 0.3rem;
   overflow-y: scroll;
+  overflow-x: visible;
+  margin-left: 5%;
 }
-.list_item {
+.friendList_item {
   cursor: pointer;
   color: white;
 }
-.message {
+.friendList_message {
   color: rgba(255, 255, 255, 0.438);
   font-size: 14px;
 }
-.newChat_btn {
-  height: 10%;
-  background-color: lightblue;
-  color: #000;
-}
-.notification {
-  color: "red";
-  position: "absolute";
-  right: "5%";
-}
-.chat_header {
+.friendList_username {
+  margin-left: 3px;
   width: 100%;
+  min-width: 200px;
   height: 4rem;
   display: flex;
   border-radius: 0.3rem 0rem 0rem 0rem;
   background-color: rgb(44, 44, 44);
-}
-.user_avatar {
-  margin-left: 3px;
-  border: none;
-}
-.user_name {
-  margin-top: 2px;
   line-height: 4rem;
   font-size: 19px;
   color: white;
   text-align: center;
   user-select: none;
+  border: none;
 }

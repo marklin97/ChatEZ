@@ -5,7 +5,7 @@ body {
   background-attachment: fixed;
   background-size: cover;
 }
-.login_form {
+.loginForm {
   position: absolute;
   top: 0;
   left: 0;
@@ -19,26 +19,24 @@ body {
   max-height: 410px;
   overflow: auto;
 }
-.emailIcon {
+.loginForm_text__warning {
+  color: $red;
+  font-size: 0.8rem;
+}
+.loginForm_emailIcon {
   margin-right: 2%;
 }
-.login_button {
+.loginForm_btn {
   margin-top: 2%;
   height: 40px;
 }
-.login_button_text {
+.loginForm_buttonText {
   margin-right: 5%;
 }
-.logo {
-  z-index: 1;
-  width: 150px;
-  height: 150px;
-  margin-left: 5%;
+.loginForm_loader {
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
-.signup_link {
+.loginForm_link {
   user-select: none;
-}
-.warning {
-  color: $red;
-  font-size: 0.8rem;
 }

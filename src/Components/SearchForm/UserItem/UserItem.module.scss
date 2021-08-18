@@ -1,0 +1,29 @@
+@import "../../../Constant/colors.module.scss";
+
+.userItem_addIcon {
+  color: grey;
+  padding: 0;
+  margin-top: 1.25rem;
+  :hover {
+    color: $blue-1;
+  }
+}
+.userItem_addIcon__hidden {
+  color: grey;
+  font-size: 15px;
+  display: block;
+  margin-top: 80%;
+}
+
+.userItem_avatar {
+  margin-left: 10%;
+  margin-bottom: 2%;
+}
+.userItem_displayName {
+  margin-left: 5%;
+}
+.userItem_email {
+  margin-left: 5%;
+  font-size: 14px;
+  color: grey;
+}

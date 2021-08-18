@@ -54,13 +54,12 @@ function* handleUserToken() {
  * This is an function initiate a welcome message for the new user
  * */
 function* initWelcomeMsg(action) {
-  const userRef = firebase
-    .firestore()
-    .collection("users")
-    .doc(action.payload.userProfile.email);
-  userRef
-    .get()
-    .then((snapShot) => {
+  try {
+    const userRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(action.payload.userProfile.email);
+    userRef.get().then((snapShot) => {
       if (!snapShot.exists) {
         userRef.set(action.payload.userProfile);
         const buildDocKey = [
@@ -82,16 +81,17 @@ function* initWelcomeMsg(action) {
             users: [action.payload.userProfile.email, "admin@portexe.com"],
             receiverHasRead: false,
           })
+          // this prevents redirection before the conversation gets init.
           .then(() => {
             window.location.href = "/dashboard";
           });
       } else {
         window.location.href = "/dashboard";
       }
-    })
-    .catch((err) => {
-      console.log(err);
     });
+  } catch (err) {
+    yield put(actions.userLoginFailAction());
+  }
 }
 
 /**

@@ -4,29 +4,35 @@
   font-size: 2.5rem;
   display: block;
 }
-.marsIcon {
+.form_marsIcon {
   @include icon;
   color: $blue-1;
 }
-.venusIcon {
+.form_venusIcon {
   @include icon;
   color: $pink;
 }
 
-.dialog_content {
+.form_dialog {
   background-color: $white-2;
   text-align: center;
   height: 100%;
 }
+.form_description {
+  margin-top: 5%;
+  background-color: white;
+  text-align: center;
+}
 
-.dialog_action {
+.form_dialogAction {
   background-color: $white-2;
   margin-top: 2%;
 }
-.optionText {
+.form_text {
   font-size: 0.8rem;
   color: $silver-1;
 }
-.save_button {
+
+.form_btn {
   color: $silver-1;
 }

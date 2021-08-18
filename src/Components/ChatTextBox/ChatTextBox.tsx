@@ -33,7 +33,8 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ submitMessageFn }) => {
    * */
   const messageValid = (text) => text && text.replace(/\s/g, "").length;
   /**
-   * This is a function to handle the sent message, store it into database
+   * This function stores the sent message to the database,
+   * and clears the current input box
    * */
   const submitMessage = () => {
     if (messageValid(chatText)) {
@@ -43,7 +44,7 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ submitMessageFn }) => {
     }
   };
   /**
-   * This is a function to handle ENTER KEY stroke
+   * This is a function to handle ENTER KEY stroke for sending the message
    * */
   const userTyping = (e) => {
     e.keyCode === 13 ? submitMessage() : setChatText(e.target.value);
@@ -51,18 +52,17 @@ const ChatTextBox: React.FC<ChatTextBoxProps> = ({ submitMessageFn }) => {
   /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
 
   return (
-    <div className={Styles.container}>
+    <div className={Styles.chatBox}>
       <TextField
         id="chatTextbox"
         multiline
         rows={4}
         InputProps={{ disableUnderline: true }}
-        className={Styles.chat_box}
         placeholder="Type your message"
         onKeyUp={(e) => userTyping(e)}
       ></TextField>
       <Send
-        className={Styles.sendBtn}
+        className={Styles.chatBox_submitBtn}
         style={{ transition: "0.5s" }}
         onClick={submitMessage}
         fontSize="large"
