@@ -9,7 +9,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import firebase from "firebase";
 import * as actions from "../../../Store/ProfileModule/actions";
-
+// import {
+//   KeyboardDatePicker,
+//   MuiPickersUtilsProvider,
+// } from "@material-ui/pickers";
 import {
   DialogContent,
   Select,
@@ -85,12 +88,12 @@ const DetailForm: React.FC<DetailFormProps> = ({ imageFile, userEmail }) => {
   // /**
   //  * This is an function to handle change of gender field
   //  * */
-  // const handleDateChange = (event: React.ChangeEvent<{ value: string }>) => {
-  //   setProfile({
-  //     ...localProfile,
-  //     birthday: event.target.value,
-  //   });
-  // };
+  const handleDateChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setProfile({
+      ...localProfile,
+      birthday: event.target.value,
+    });
+  };
   /**
    * This is an function to handle state of editable of form
    * */
@@ -211,6 +214,11 @@ const DetailForm: React.FC<DetailFormProps> = ({ imageFile, userEmail }) => {
                 defaultValue={birthday}
                 className={Styles.form_text}
                 disabled={disableEdit}
+                onChange={handleDateChange}
+                // disables key input on date selection
+                onKeyDown={(event) => {
+                  event.preventDefault();
+                }}
                 InputProps={{
                   inputProps: {
                     min: "1970-01-01",
