@@ -11,7 +11,8 @@
 
 <p align="center" display="flex">
  <img width="1420" alt="Login page" src="https://user-images.githubusercontent.com/48002791/130382009-9ba8ff1b-a4dd-4451-a6f7-f21c4133a38b.png">
- <img width="1043" alt="Screen Shot 2021-08-23 at 1 21 15 pm" src="https://user-images.githubusercontent.com/48002791/130385719-6a634dd5-b128-4883-a220-b2e73ec3c0b8.png">
+ <img width="1043" alt="Dashboard" src="https://user-images.githubusercontent.com/48002791/130385719-6a634dd5-b128-4883-a220-b2e73ec3c0b8.png">
+ <img width="1059" alt="Profile Customization" src="https://user-images.githubusercontent.com/48002791/130386038-7566204c-1c47-4eda-ba30-1bf4946533a7.png">
 
 
 </p>
@@ -23,7 +24,8 @@
 - [x] Messages works offline
 - [x] Cloud storage and backup
 - [x] Support multiple languages
-- [x] Profiles Customization
+- [x] Profiles customization
+- [x] Friend search 
 
 ### Upcoming Features
 - [x] Emojis
