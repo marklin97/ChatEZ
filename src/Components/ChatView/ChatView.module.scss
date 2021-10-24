@@ -24,7 +24,7 @@
   line-height: 3rem;
 }
 .chatView {
-  overflow: scroll;
+  overflow: auto;
   background-color: $white-1;
   top: 200px;
   height: 100%;

@@ -9,6 +9,8 @@ import Grid from "@material-ui/core/Grid";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Store/rootReducer";
 import * as actions from "../../Store/ProfileModule/actions";
+import { useHistory } from "react-router-dom";
+
 // import { timeStamp } from "console";
 
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
@@ -36,6 +38,7 @@ const initState = {
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
 const Dashboard = (): JSX.Element => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   /* <------------------------------------ **** HOOKS START **** ------------------------------------ */
   /************* This section will include this component HOOK function *************/
@@ -68,7 +71,7 @@ const Dashboard = (): JSX.Element => {
     firebase.auth().onAuthStateChanged(async (user) => {
       // redirect unauthorized user to the login page
       if (!user) {
-        window.location.href = "/login";
+        history.push("/login");
       } else {
         let email = user.email;
         // only for facebook users
@@ -181,13 +184,15 @@ const Dashboard = (): JSX.Element => {
     <div className={Styles.Dashboard_container}>
       <Grid container direction="row" alignItems="center" justify="center">
         <Grid item xs={3}>
-          <FriendList
-            selectChatFn={selectChat}
-            userEmail={email}
-            chats={chats}
-            userProfile={userProfile ? userProfile : initState}
-            selectedChat={selectedChat}
-          />
+          {firebase.auth().currentUser ? (
+            <FriendList
+              selectChatFn={selectChat}
+              userEmail={email}
+              chats={chats}
+              userProfile={userProfile ? userProfile : initState}
+              selectedChat={selectedChat}
+            />
+          ) : null}
         </Grid>
         <Grid item xs={9}>
           {chats ? (
