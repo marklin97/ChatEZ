@@ -1,46 +1,61 @@
-# Getting Started with Create React App
+<p align="center">
+   <a href="#">
+    <img alt="B32E7A2C-31A3-4F13-A544-42B8AE7CB518" src="https://user-images.githubusercontent.com/48002791/130378162-2a91362b-7342-47bc-85ef-3220e495b5a3.png">
+  </a>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# ChatEZ ✨
 
-## Available Scripts
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2c150080-83d6-475e-b9f7-8110919d4e6c/deploy-status)](https://app.netlify.com/sites/chateznet/deploys) ![GitHub contributors](https://img.shields.io/github/contributors/marklin97/ChatEZ) ![GitHub issues](https://img.shields.io/github/issues/marklin97/ChatEZ) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/marklin97/ChatEZ/graphs/commit-activity)
+<p><a href="https://chateznet.netlify.app">Visit ChatEZ</a></p>
+<p align="center" display="flex">
+ <img width="1420" alt="Login page" src="https://user-images.githubusercontent.com/48002791/130382009-9ba8ff1b-a4dd-4451-a6f7-f21c4133a38b.png">
+ <img width="1043" alt="Dashboard" src="https://user-images.githubusercontent.com/48002791/130385719-6a634dd5-b128-4883-a220-b2e73ec3c0b8.png">
+ <img width="1059" alt="Profile Customization" src="https://user-images.githubusercontent.com/48002791/130386038-7566204c-1c47-4eda-ba30-1bf4946533a7.png">
 
-In the project directory, you can run:
 
-### `npm start`
+</p>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Features
 
-### `npm test`
+- [x] Simple log-in & Registration
+- [x] Messages works offline
+- [x] Cloud storage and backup
+- [x] Support multiple languages
+- [x] Profiles customization
+- [x] Friend search 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Upcoming Features
+- [x] Emojis
+- [x] Image & File transfering
+- [x] Dark & Light mode
+- [x] Cross platform solution
+- [x] Display user status (online, busy, offline)
+- [x] Message broadcasting (group message)
 
-### `npm run build`
+### How to run the project in development mode
+* Clone or download repository as a zip file.
+* Open project in Visual Studio
+* Create a new Firebase Project in console
+* Connect project with Firebase
+* Replace the block of code `firebase.initializeApp` with your own app details
+* Run command `npm start` at VS console
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### License
+    Copyright 2021 Mark Lin
+ 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+ 
+        http://www.apache.org/licenses/LICENSE-2.0
+ 
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
